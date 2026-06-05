@@ -24,7 +24,6 @@
         }
 
         html {
-            /* We will handle smooth scroll via JS for more control over speed */
             scroll-behavior: auto;
         }
 
@@ -32,7 +31,7 @@
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-size: 20px; /* Increased from default */
+            font-size: 20px;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
@@ -46,11 +45,11 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.5; /* Slightly reduced for wave subtlety */
+            opacity: 0.5;
         }
 
         .container {
-            max-width: 1000px; /* Increased from 800px */
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 2.5rem;
             position: relative;
@@ -58,7 +57,7 @@
         }
 
         section {
-            padding: 100px 0; /* Slightly increased padding */
+            padding: 100px 0;
             border-bottom: 1px dashed var(--border-color);
         }
 
@@ -66,7 +65,6 @@
             border-bottom: none;
         }
 
-        /* Hero */
         #hero {
             height: 50vh;
             display: flex;
@@ -76,7 +74,7 @@
         }
 
         h1 {
-            font-size: 2.6rem; /* Increased from 2rem */
+            font-size: 2.6rem;
             font-weight: normal;
             margin-bottom: 0.7rem;
             color: var(--text-primary);
@@ -85,7 +83,7 @@
         }
 
         .hero-subtitle {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             color: var(--text-secondary);
             margin-bottom: 2.5rem;
         }
@@ -98,14 +96,14 @@
 
         .cta-button {
             display: inline-block;
-            padding: 10px 20px; /* Scaled up */
+            padding: 10px 20px;
             background-color: var(--bg-color);
             color: var(--text-primary);
             text-decoration: none;
             font-weight: bold;
             border: 2px solid var(--text-primary);
             transition: var(--transition);
-            font-size: 1.1rem; /* Increased from 0.9rem */
+            font-size: 1.1rem;
             cursor: pointer;
         }
 
@@ -116,9 +114,8 @@
             box-shadow: -6px -6px 0px var(--accent-color);
         }
 
-        /* Generic Section Styling */
         h2 {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             margin-bottom: 2rem;
             color: var(--text-primary);
             background: var(--accent-color);
@@ -128,24 +125,23 @@
         }
 
         .merged-title {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             line-height: 1.3;
             max-width: 100%;
         }
 
         h3.section-subtitle {
-            font-size: 1.2rem; /* Increased from 0.95rem */
+            font-size: 1.2rem;
             margin: 2rem 0 1.2rem 0;
             color: var(--text-secondary);
             text-decoration: underline;
         }
 
         .content-text {
-            font-size: 1.2rem; /* Increased from 0.95rem */
-            max-width: 800px; /* Broadened */
+            font-size: 1.2rem;
+            max-width: 800px;
         }
 
-        /* Cards and Lists */
         .item-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -154,25 +150,25 @@
 
         .item-card {
             background-color: var(--card-bg);
-            padding: 1.8rem; /* Scaled up */
+            padding: 1.8rem;
             border: 1px solid var(--border-color);
             transition: var(--transition);
         }
 
         .item-card:hover {
             border-color: var(--text-primary);
-            box-shadow: 6px 6px 0px var(--accent-green); /* Changed to green shadow */
+            box-shadow: 6px 6px 0px var(--accent-green);
         }
 
         .item-card h4 {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             margin-bottom: 0.6rem;
         }
 
         .item-card p {
             color: var(--text-secondary);
             margin-bottom: 1rem;
-            font-size: 1.15rem; /* Increased from 0.9rem */
+            font-size: 1.15rem;
         }
 
         .link-text {
@@ -182,16 +178,15 @@
             color: var(--text-primary);
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem; /* Increased from 0.85rem */
+            font-size: 1.1rem;
             transition: var(--transition);
         }
 
         .link-text:hover {
             text-decoration: underline;
-            color: var(--accent-green); /* Added green hover */
+            color: var(--accent-green);
         }
 
-        /* Specific Lists */
         ul.simple-list {
             list-style: none;
             padding-left: 0;
@@ -201,34 +196,70 @@
             margin-bottom: 0.8rem;
             position: relative;
             padding-left: 1.5rem;
-            font-size: 1.15rem; /* Scaled up */
+            font-size: 1.15rem;
         }
 
         ul.simple-list li::before {
             content: ">";
             position: absolute;
             left: 0;
-            color: var(--accent-green); /* Changed marker to green */
+            color: var(--accent-green);
             font-weight: bold;
         }
 
-        /* Footer */
+        /* Popup Notification */
+        #popup {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--text-primary);
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        #popup.show {
+            opacity: 1;
+        }
+
+        /* Die Interaction Zone */
+        #die-zone {
+            position: fixed;
+            top: 50px;
+            left: 20px;
+            width: 300px;
+            height: 300px;
+            cursor: pointer;
+            z-index: 100;
+            background: transparent;
+        }
+
         footer {
             padding: 60px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1rem; /* Increased from 0.8rem */
+            font-size: 1rem;
             color: var(--text-secondary);
         }
 
         @media (max-width: 600px) {
             section { padding: 40px 0; }
+            #die-zone { display: none; } /* Hide die on mobile for space */
         }
     </style>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
+    <div id="die-zone" title="Click the floating D20!"></div>
+    <div id="popup">Email copied!</div>
 
     <main class="container">
         <!-- Hero Section -->
@@ -290,12 +321,10 @@
         <!-- Merged Section -->
         <section id="extra">
             <h2 class="merged-title">What i do when i'm not doing the things i've talked about above</h2>
-            
-            
             <div class="item-grid">
                 <div class="item-card">
                     <p>I love reading. Usually fiction but sometimes Indian non-fiction too. </p>
-                    <p>Some of my favourite writers include Arundhati Roy, Olga Tokarczuk and Patrick Rothfuss among others.Find me on <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-text">StoryGraph</a> </p>
+                    <p>Some of my favourite writers include Arundhati Roy, Olga Tokarczuk and Patrick Rothfuss among others. Find me on <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-text">StoryGraph</a> </p>
                     <p>
                         I regularly watch anime. Here is my <a href="https://myanimelist.net/profile/kushalgangs" class="link-text">MAL Account</a>
                     </p>
@@ -308,7 +337,7 @@
         <!-- Contact Section -->
         <section id="contact">
             <h2>Contact and Socials</h2>
-            <a href="kushalgangadhariah@gmail.com" class="contact-email" style="font-size: 1.1rem; color: var(--text-primary); text-decoration: underline; font-weight: bold; margin-bottom: 1rem; display: block;">eMail</a>
+            <a href="javascript:void(0)" onclick="copyEmail(event)" class="contact-email" style="font-size: 1.1rem; color: var(--text-primary); text-decoration: underline; font-weight: bold; margin-bottom: 1rem; display: block;">eMail</a>
             <div class="nav-links">
                 <a href="https://github.com/kushal-gangadhar" class="link-text">GitHub</a>
                 <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="link-text">LinkedIn</a>
@@ -327,104 +356,109 @@
         const ctx = canvas.getContext('2d');
 
         let dots = [];
-        const dotSpacing = 50; // Grid spacing
-        const jitterAmount = 8; // Neighbourhood size
+        const dotSpacing = 60;
+        const jitterAmount = 8;
 
-        // 3D Pyramid logic
-        class Pyramid {
+        // Double Pyramid (Octahedron)
+        class Octahedron {
             constructor() {
-                this.size = 150;
+                this.size = 120;
                 this.angleX = 0;
                 this.angleY = 0;
                 this.nodes = [
-                    [0, -1, 0],    // Top
-                    [-1, 1, -1],   // Base 1
-                    [1, 1, -1],    // Base 2
-                    [1, 1, 1],     // Base 3
-                    [-1, 1, 1]     // Base 4
+                    [0, -1.2, 0], [0, 1.2, 0], // Top, Bottom
+                    [1, 0, 0], [0, 0, 1], [-1, 0, 0], [0, 0, -1] // Corners
                 ];
                 this.edges = [
-                    [0, 1], [0, 2], [0, 3], [0, 4], // Sides
-                    [1, 2], [2, 3], [3, 4], [4, 1]  // Base
+                    [0, 2], [0, 3], [0, 4], [0, 5],
+                    [1, 2], [1, 3], [1, 4], [1, 5],
+                    [2, 3], [3, 4], [4, 5], [5, 2]
                 ];
             }
-
-            rotate(ax, ay) {
-                this.angleX += ax;
-                this.angleY += ay;
-            }
-
+            rotate(ax, ay) { this.angleX += ax; this.angleY += ay; }
             draw() {
-                const offsetX = canvas.width - 200; // Top right
+                const offsetX = canvas.width - 200;
                 const offsetY = 200;
-                const perspective = 400;
-
-                const rotatedNodes = this.nodes.map(node => {
-                    let x = node[0] * this.size;
-                    let y = node[1] * this.size;
-                    let z = node[2] * this.size;
-
-                    // Rotate Y
-                    let cosY = Math.cos(this.angleY);
-                    let sinY = Math.sin(this.angleY);
-                    let tempX = x * cosY - z * sinY;
-                    let tempZ = x * sinY + z * cosY;
-                    x = tempX;
-                    z = tempZ;
-
-                    // Rotate X
-                    let cosX = Math.cos(this.angleX);
-                    let sinX = Math.sin(this.angleX);
-                    let tempY = y * cosX - z * sinX;
-                    tempZ = y * sinX + z * cosX;
-                    y = tempY;
-                    z = tempZ;
-
-                    // Project
+                const perspective = 500;
+                const projected = this.nodes.map(node => {
+                    let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
+                    let cY = Math.cos(this.angleY), sY = Math.sin(this.angleY);
+                    let tx = x * cY - z * sY, tz = x * sY + z * cY;
+                    x = tx; z = tz;
+                    let cX = Math.cos(this.angleX), sX = Math.sin(this.angleX);
+                    let ty = y * cX - z * sX; tz = y * sX + z * cX;
+                    y = ty; z = tz;
                     const scale = perspective / (perspective + z);
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
-
                 ctx.beginPath();
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = 'rgba(177, 156, 217, 0.4)'; // Purple edge
-
-                this.edges.forEach(edge => {
-                    const start = rotatedNodes[edge[0]];
-                    const end = rotatedNodes[edge[1]];
-                    ctx.moveTo(start[0], start[1]);
-                    ctx.lineTo(end[0], end[1]);
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = 'rgba(177, 156, 217, 0.4)';
+                this.edges.forEach(e => {
+                    ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
+                    ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
                 });
                 ctx.stroke();
-
-                // Add a subtle fill
-                ctx.beginPath();
-                ctx.fillStyle = 'rgba(190, 242, 100, 0.05)'; // Lime tint
-                ctx.moveTo(rotatedNodes[0][0], rotatedNodes[0][1]);
-                ctx.lineTo(rotatedNodes[1][0], rotatedNodes[1][1]);
-                ctx.lineTo(rotatedNodes[2][0], rotatedNodes[2][1]);
-                ctx.closePath();
-                ctx.fill();
             }
         }
 
-        const pyramid = new Pyramid();
+        // 20-sided Die (Icosahedron)
+        class D20 {
+            constructor() {
+                this.size = 100;
+                this.angleX = 0;
+                this.angleY = 0;
+                const phi = (1 + Math.sqrt(5)) / 2;
+                this.nodes = [
+                    [0, 1, phi], [0, 1, -phi], [0, -1, phi], [0, -1, -phi],
+                    [1, phi, 0], [1, -phi, 0], [-1, phi, 0], [-1, -phi, 0],
+                    [phi, 0, 1], [phi, 0, -1], [-phi, 0, 1], [-phi, 0, -1]
+                ].map(n => {
+                    const len = Math.sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2]);
+                    return [n[0]/len, n[1]/len, n[2]/len];
+                });
+                this.edges = [];
+                for(let i=0; i<12; i++) {
+                    for(let j=i+1; j<12; j++) {
+                        const d = Math.hypot(this.nodes[i][0]-this.nodes[j][0], this.nodes[i][1]-this.nodes[j][1], this.nodes[i][2]-this.nodes[j][2]);
+                        if (d < 1.1) this.edges.push([i, j]);
+                    }
+                }
+            }
+            rotate(ax, ay) { this.angleX += ax; this.angleY += ay; }
+            draw() {
+                const offsetX = 150, offsetY = 200, perspective = 500;
+                const projected = this.nodes.map(node => {
+                    let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
+                    let cY = Math.cos(this.angleY), sY = Math.sin(this.angleY);
+                    let tx = x * cY - z * sY, tz = x * sY + z * cY;
+                    x = tx; z = tz;
+                    let cX = Math.cos(this.angleX), sX = Math.sin(this.angleX);
+                    let ty = y * cX - z * sX; tz = y * sX + z * cX;
+                    y = ty; z = tz;
+                    const scale = perspective / (perspective + z);
+                    return [x * scale + offsetX, y * scale + offsetY];
+                });
+                ctx.beginPath();
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = 'rgba(244, 114, 182, 0.4)';
+                this.edges.forEach(e => {
+                    ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
+                    ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
+                });
+                ctx.stroke();
+            }
+        }
+
+        const octa = new Octahedron();
+        const d20 = new D20();
 
         class Dot {
             constructor(x, y, color) {
-                this.baseX = x;
-                this.baseY = y;
-                this.color = color;
-                this.x = x;
-                this.y = y;
-                this.radius = 2.5;
-                
-                // Random offset targets
-                this.targetX = x;
-                this.targetY = y;
-                this.timer = 0;
+                this.baseX = x; this.baseY = y; this.color = color;
+                this.x = x; this.y = y; this.radius = 2.5;
+                this.targetX = x; this.targetY = y; this.timer = 0;
             }
-
             update() {
                 this.timer--;
                 if (this.timer <= 0) {
@@ -432,37 +466,25 @@
                     this.targetY = this.baseY + (Math.random() - 0.5) * jitterAmount * 2;
                     this.timer = 10 + Math.random() * 40;
                 }
-
-                // Smooth interpolation to target
                 this.x += (this.targetX - this.x) * 0.05;
                 this.y += (this.targetY - this.y) * 0.05;
             }
-
             draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color; ctx.fill();
             }
         }
 
         function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             dots = [];
             const cols = Math.ceil(canvas.width / dotSpacing) + 1;
             const rows = Math.ceil(canvas.height / dotSpacing) + 1;
-
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
-                    const x = i * dotSpacing;
-                    const y = j * dotSpacing;
-                    
-                    // Alternate colors: Lime Green and Pink
+                    const x = i * dotSpacing, y = j * dotSpacing;
                     const isLime = (i + j) % 2 === 0;
                     const color = isLime ? 'rgba(190, 242, 100, 0.4)' : 'rgba(244, 114, 182, 0.4)';
-                    
                     dots.push(new Dot(x, y, color));
                 }
             }
@@ -470,53 +492,60 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            dots.forEach(dot => {
-                dot.update();
-                dot.draw();
-            });
-
-            pyramid.rotate(0.01, 0.01);
-            pyramid.draw();
-
+            dots.forEach(dot => { dot.update(); dot.draw(); });
+            octa.rotate(0.008, 0.012); octa.draw();
+            d20.rotate(-0.01, 0.005); d20.draw();
             requestAnimationFrame(animate);
         }
 
-        // Custom Smooth Scroll Logic
         function slowSmoothScroll(targetId) {
             const targetElement = document.querySelector(targetId);
             if (!targetElement) return;
-
             const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-            const startPosition = window.pageYOffset;
-            const distance = targetPosition - startPosition;
-            const duration = 1500; // 1.5 seconds for a slower feel
-            let start = null;
-
+            const startPosition = window.pageYOffset, distance = targetPosition - startPosition;
+            const duration = 1500; let start = null;
             function step(timestamp) {
                 if (!start) start = timestamp;
-                const progress = timestamp - start;
-                const time = Math.min(progress / duration, 1);
-
-                // Easing function (easeInOutCubic)
+                const progress = timestamp - start, time = Math.min(progress / duration, 1);
                 const ease = time < 0.5 ? 4 * time * time * time : 1 - Math.pow(-2 * time + 2, 3) / 2;
-
                 window.scrollTo(0, startPosition + distance * ease);
-
-                if (progress < duration) {
-                    requestAnimationFrame(step);
-                }
+                if (progress < duration) requestAnimationFrame(step);
             }
-
             requestAnimationFrame(step);
         }
 
-        // Attach scroll listeners
+        function copyEmail(e) {
+            e.preventDefault();
+            const email = "kushalgangadhariah@gmail.com";
+            navigator.clipboard.writeText(email).then(() => {
+                const popup = document.getElementById('popup');
+                popup.classList.add('show');
+                setTimeout(() => popup.classList.remove('show'), 2000);
+            });
+        }
+
+        document.getElementById('die-zone').addEventListener('click', () => {
+            const roll = Math.floor(Math.random() * 20) + 1;
+            const messages = [
+                "Critical failure! But the die is still pretty.",
+                "Better luck next time.", "A solid effort.", "Not bad at all.",
+                "You're getting warmer.", "Luck is on your side.", 
+                "Great roll!", "Critical hit! You've unlocked... a nice feeling."
+            ];
+            const msg = roll === 20 ? messages[7] : (roll === 1 ? messages[0] : `You rolled a ${roll}. ${messages[Math.floor(Math.random() * 6) + 1]}`);
+            const popup = document.getElementById('popup');
+            popup.innerText = msg;
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+                setTimeout(() => popup.innerText = "Email copied!", 300);
+            }, 3000);
+        });
+
         document.querySelectorAll('.js-scroll').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetId = link.getAttribute('href');
-                slowSmoothScroll(targetId);
+                slowSmoothScroll(link.getAttribute('href'));
             });
         });
 
