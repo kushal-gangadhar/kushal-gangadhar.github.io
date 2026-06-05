@@ -24,7 +24,6 @@
         }
 
         html {
-            /* We will handle smooth scroll via JS for more control over speed */
             scroll-behavior: auto;
         }
 
@@ -32,7 +31,7 @@
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-size: 20px; /* Increased from default */
+            font-size: 20px;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
@@ -46,11 +45,11 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.5; /* Slightly reduced for wave subtlety */
+            opacity: 0.5;
         }
 
         .container {
-            max-width: 1000px; /* Increased from 800px */
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 2.5rem;
             position: relative;
@@ -58,7 +57,8 @@
         }
 
         section {
-            padding: 100px 0; /* Slightly increased padding */
+            width: 100%;
+            padding: 100px 0;
             border-bottom: 1px dashed var(--border-color);
         }
 
@@ -66,7 +66,13 @@
             border-bottom: none;
         }
 
-        /* Hero */
+        /* Section Background Shades */
+        #hero { background-color: #f9f5ff; }
+        #about { background-color: #f3ebff; }
+        #projects { background-color: #ede0ff; }
+        #cv { background-color: #e7d6ff; }
+        #extra { background-color: #fdf2f8; } /* Pinkish shade for personal/extra */
+
         #hero {
             height: 50vh;
             display: flex;
@@ -76,7 +82,7 @@
         }
 
         h1 {
-            font-size: 2.6rem; /* Increased from 2rem */
+            font-size: 2.6rem;
             font-weight: normal;
             margin-bottom: 0.7rem;
             color: var(--text-primary);
@@ -85,7 +91,7 @@
         }
 
         .hero-subtitle {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             color: var(--text-secondary);
             margin-bottom: 2.5rem;
         }
@@ -98,14 +104,14 @@
 
         .cta-button {
             display: inline-block;
-            padding: 10px 20px; /* Scaled up */
+            padding: 10px 20px;
             background-color: var(--bg-color);
             color: var(--text-primary);
             text-decoration: none;
             font-weight: bold;
             border: 2px solid var(--text-primary);
             transition: var(--transition);
-            font-size: 1.1rem; /* Increased from 0.9rem */
+            font-size: 1.1rem;
             cursor: pointer;
         }
 
@@ -116,9 +122,8 @@
             box-shadow: -6px -6px 0px var(--accent-color);
         }
 
-        /* Generic Section Styling */
         h2 {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             margin-bottom: 2rem;
             color: var(--text-primary);
             background: var(--accent-color);
@@ -128,24 +133,23 @@
         }
 
         .merged-title {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             line-height: 1.3;
             max-width: 100%;
         }
 
         h3.section-subtitle {
-            font-size: 1.2rem; /* Increased from 0.95rem */
+            font-size: 1.2rem;
             margin: 2rem 0 1.2rem 0;
             color: var(--text-secondary);
             text-decoration: underline;
         }
 
         .content-text {
-            font-size: 1.2rem; /* Increased from 0.95rem */
-            max-width: 800px; /* Broadened */
+            font-size: 1.2rem;
+            max-width: 800px;
         }
 
-        /* Cards and Lists */
         .item-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -154,25 +158,25 @@
 
         .item-card {
             background-color: var(--card-bg);
-            padding: 1.8rem; /* Scaled up */
+            padding: 1.8rem;
             border: 1px solid var(--border-color);
             transition: var(--transition);
         }
 
         .item-card:hover {
             border-color: var(--text-primary);
-            box-shadow: 6px 6px 0px var(--accent-green); /* Changed to green shadow */
+            box-shadow: 6px 6px 0px var(--accent-green);
         }
 
         .item-card h4 {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.4rem;
             margin-bottom: 0.6rem;
         }
 
         .item-card p {
             color: var(--text-secondary);
             margin-bottom: 1rem;
-            font-size: 1.15rem; /* Increased from 0.9rem */
+            font-size: 1.15rem;
         }
 
         .link-text {
@@ -182,16 +186,15 @@
             color: var(--text-primary);
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem; /* Increased from 0.85rem */
+            font-size: 1.1rem;
             transition: var(--transition);
         }
 
         .link-text:hover {
             text-decoration: underline;
-            color: var(--accent-green); /* Added green hover */
+            color: var(--accent-green);
         }
 
-        /* Specific Lists */
         ul.simple-list {
             list-style: none;
             padding-left: 0;
@@ -201,18 +204,17 @@
             margin-bottom: 0.8rem;
             position: relative;
             padding-left: 1.5rem;
-            font-size: 1.15rem; /* Scaled up */
+            font-size: 1.15rem;
         }
 
         ul.simple-list li::before {
             content: ">";
             position: absolute;
             left: 0;
-            color: var(--accent-green); /* Changed marker to green */
+            color: var(--accent-green);
             font-weight: bold;
         }
 
-        /* Popup Notification */
         #popup {
             position: fixed;
             bottom: 30px;
@@ -234,7 +236,6 @@
             opacity: 1;
         }
 
-        /* Die Interaction Zone */
         #die-zone {
             position: fixed;
             top: 50px;
@@ -246,19 +247,14 @@
             background: transparent;
         }
 
-        /* Footer */
         footer {
             padding: 60px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem; /* Increased from 0.8rem */
-            color: var(--text-secondary);
+            background-color: #f9f5ff;
         }
 
         @media (max-width: 600px) {
             section { padding: 40px 0; }
-            #die-zone { display: none; } /* Hide die on mobile for space */
+            #die-zone { display: none; }
         }
     </style>
 </head>
@@ -267,95 +263,107 @@
     <div id="die-zone" title="Click the floating D20!"></div>
     <div id="popup">Email copied!</div>
 
-    <main class="container">
+    <main>
         <!-- Hero Section -->
         <section id="hero">
-            <h1>Kushal Gangadhar</h1>
-            <p class="hero-subtitle">Student & Maker.</p>
-            <div class="nav-links">
-                <a href="#projects" class="cta-button js-scroll">/projects</a>
-                <a href="#cv" class="cta-button js-scroll">/CV</a>
-                <a href="#extra" class="cta-button js-scroll">/personal</a>
+            <div class="container">
+                <h1>Kushal Gangadhar</h1>
+                <p class="hero-subtitle">Student & Maker.</p>
+                <div class="nav-links">
+                    <a href="#projects" class="cta-button js-scroll">/projects</a>
+                    <a href="#cv" class="cta-button js-scroll">/CV</a>
+                    <a href="#extra" class="cta-button js-scroll">/personal</a>
+                </div>
             </div>
         </section>
 
         <!-- About Section -->
         <section id="about">
-            <h2>About</h2>
-            <p class="content-text">
-                I’m wrapping up my BS in Computer Science and am fascinated by the mix of formal verification, distributed systems, and AI. I love the challenge of turning rigorous theory into things that actually work and create value.
-            </p>
+            <div class="container">
+                <h2>About</h2>
+                <p class="content-text">
+                    I’m wrapping up my BS in Computer Science and am fascinated by the mix of formal verification, distributed systems, and AI. I love the challenge of turning rigorous theory into things that actually work and create value.
+                </p>
+            </div>
         </section>
 
         <!-- Projects Section -->
         <section id="projects">
-            <h2>Projects</h2>
-            
-            <h3 class="section-subtitle">Personal Projects</h3>
-            <div class="item-grid">
-                <div class="item-card">
-                    <h4>Lumina Dashboard</h4>
-                    <p>A data visualization engine with real-time streaming and filtering logic.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+            <div class="container">
+                <h2>Projects</h2>
+                
+                <h3 class="section-subtitle">Personal Projects</h3>
+                <div class="item-grid">
+                    <div class="item-card">
+                        <h4>Lumina Dashboard</h4>
+                        <p>A data visualization engine with real-time streaming and filtering logic.</p>
+                        <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                    </div>
+                    <div class="item-card">
+                        <h4>Aura Shop</h4>
+                        <p>A headless e-commerce storefront optimized for Core Web Vitals.</p>
+                        <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                    </div>
                 </div>
-                <div class="item-card">
-                    <h4>Aura Shop</h4>
-                    <p>A headless e-commerce storefront optimized for Core Web Vitals.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
-                </div>
-            </div>
 
-            <h3 class="section-subtitle">Academic Projects</h3>
-            <div class="item-grid">
-                <div class="item-card">
-                    <h4>Formal Verification Research</h4>
-                    <p>Investigating automated proof techniques for distributed consensus protocols.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                <h3 class="section-subtitle">Academic Projects</h3>
+                <div class="item-grid">
+                    <div class="item-card">
+                        <h4>Formal Verification Research</h4>
+                        <p>Investigating automated proof techniques for distributed consensus protocols.</p>
+                        <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- CV Section -->
         <section id="cv">
-            <h2>CV</h2>
-            <p class="content-text">
-                You can find my detailed academic and professional history here: 
-                <a href="cv.pdf" class="link-text" style="font-size: 1rem;">[download_cv_pdf]</a>
-            </p>
+            <div class="container">
+                <h2>CV</h2>
+                <p class="content-text">
+                    You can find my detailed academic and professional history here: 
+                    <a href="cv.pdf" class="link-text" style="font-size: 1rem;">[download_cv_pdf]</a>
+                </p>
+            </div>
         </section>
 
         <!-- Merged Section -->
         <section id="extra">
-            <h2 class="merged-title">What i do when i'm not doing the things i've talked about above</h2>
-            
-            
-            <div class="item-grid">
-                <div class="item-card">
-                    <p>I love reading. Usually fiction but sometimes Indian non-fiction too. </p>
-                    <p>Some of my favourite writers include Arundhati Roy, Olga Tokarczuk and Patrick Rothfuss among others. Find me on <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-text">StoryGraph</a> </p>
-                    <p>
-                        I regularly watch anime. Here is my <a href="https://myanimelist.net/profile/kushalgangs" class="link-text">MAL Account</a>
-                    </p>
-                    <p>I enjoy watching and playing football and table tennis</p>
-                    <p>I find myself listening to the same set of 10 songs for weeks</p>
+            <div class="container">
+                <h2 class="merged-title">What i do when i'm not doing the things i've talked about above</h2>
+                <div class="item-grid">
+                    <div class="item-card">
+                        <p>I love reading. Usually fiction but sometimes Indian non-fiction too. </p>
+                        <p>Some of my favourite writers include Arundhati Roy, Olga Tokarczuk and Patrick Rothfuss among others. Find me on <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-text">StoryGraph</a> </p>
+                        <p>
+                            I regularly watch anime. Here is my <a href="https://myanimelist.net/profile/kushalgangs" class="link-text">MAL Account</a>
+                        </p>
+                        <p>I enjoy watching and playing football and table tennis</p>
+                        <p>I find myself listening to the same set of 10 songs for weeks</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact">
-            <h2>Contact and Socials</h2>
-            <a href="javascript:void(0)" onclick="copyEmail(event)" class="contact-email" style="font-size: 1.1rem; color: var(--text-primary); text-decoration: underline; font-weight: bold; margin-bottom: 1rem; display: block;">eMail</a>
-            <div class="nav-links">
-                <a href="https://github.com/kushal-gangadhar" class="link-text">GitHub</a>
-                <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="link-text">LinkedIn</a>
+        <section id="contact" style="background-color: #f3ebff;">
+            <div class="container">
+                <h2>Contact and Socials</h2>
+                <a href="javascript:void(0)" onclick="copyEmail(event)" class="contact-email" style="font-size: 1.1rem; color: var(--text-primary); text-decoration: underline; font-weight: bold; margin-bottom: 1rem; display: block;">eMail</a>
+                <div class="nav-links">
+                    <a href="https://github.com/kushal-gangadhar" class="link-text">GitHub</a>
+                    <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="link-text">LinkedIn</a>
+                </div>
             </div>
         </section>
 
         <!-- Footer -->
         <footer>
-            <p>&copy; 2026 Kushal Gangadhar</p>
-            <a href="#hero" class="link-text js-scroll" style="color: var(--text-secondary);">back_to_top</a>
+            <div class="container" style="display: flex; justify-content: space-between; align-items: center; font-size: 1rem; color: var(--text-secondary);">
+                <p>&copy; 2026 Kushal Gangadhar</p>
+                <a href="#hero" class="link-text js-scroll" style="color: var(--text-secondary);">back_to_top</a>
+            </div>
         </footer>
     </main>
 
@@ -364,18 +372,17 @@
         const ctx = canvas.getContext('2d');
 
         let dots = [];
-        const dotSpacing = 60; // Grid spacing
-        const jitterAmount = 8; // Neighbourhood size
+        const dotSpacing = 60; 
+        const jitterAmount = 8; 
 
-        // Double Pyramid (Octahedron)
         class Octahedron {
             constructor() {
                 this.size = 120;
                 this.angleX = 0;
                 this.angleY = 0;
                 this.nodes = [
-                    [0, -1.2, 0], [0, 1.2, 0], // Top, Bottom
-                    [1, 0, 0], [0, 0, 1], [-1, 0, 0], [0, 0, -1] // Corners
+                    [0, -1.2, 0], [0, 1.2, 0], 
+                    [1, 0, 0], [0, 0, 1], [-1, 0, 0], [0, 0, -1] 
                 ];
                 this.edges = [
                     [0, 2], [0, 3], [0, 4], [0, 5],
@@ -390,7 +397,7 @@
             }
 
             draw() {
-                const offsetX = canvas.width - 200; // Bottom right
+                const offsetX = canvas.width - 200; 
                 const offsetY = canvas.height - 200;
                 const perspective = 500;
 
@@ -398,15 +405,12 @@
                     let x = node[0] * this.size;
                     let y = node[1] * this.size;
                     let z = node[2] * this.size;
-
                     let cY = Math.cos(this.angleY), sY = Math.sin(this.angleY);
                     let tx = x * cY - z * sY, tz = x * sY + z * cY;
                     x = tx; z = tz;
-
                     let cX = Math.cos(this.angleX), sX = Math.sin(this.angleX);
                     let ty = y * cX - z * sX; tz = y * sX + z * cX;
                     y = ty; z = tz;
-
                     const scale = perspective / (perspective + z);
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
@@ -422,7 +426,6 @@
             }
         }
 
-        // 20-sided Die (Icosahedron)
         class D20 {
             constructor() {
                 this.size = 100;
@@ -462,15 +465,13 @@
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
                 ctx.beginPath();
-                ctx.lineWidth = 3.0; // Increased from 1.5
-                ctx.strokeStyle = 'rgba(190, 242, 100, 0.8)'; // Increased from 0.4
+                ctx.lineWidth = 3.0; 
+                ctx.strokeStyle = 'rgba(190, 242, 100, 0.8)'; 
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
                 });
                 ctx.stroke();
-
-                // Add a very subtle fill to the die for volume
                 ctx.fillStyle = 'rgba(190, 242, 100, 0.1)';
                 ctx.fill();
             }
