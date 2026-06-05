@@ -462,13 +462,17 @@
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
                 ctx.beginPath();
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = 'rgba(190, 242, 100, 0.4)';
+                ctx.lineWidth = 3.0; // Increased from 1.5
+                ctx.strokeStyle = 'rgba(190, 242, 100, 0.8)'; // Increased from 0.4
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
                 });
                 ctx.stroke();
+
+                // Add a very subtle fill to the die for volume
+                ctx.fillStyle = 'rgba(190, 242, 100, 0.1)';
+                ctx.fill();
             }
         }
 
