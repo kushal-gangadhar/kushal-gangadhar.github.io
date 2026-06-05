@@ -22,7 +22,8 @@
         }
 
         html {
-            scroll-behavior: smooth;
+            /* We will handle smooth scroll via JS for more control over speed */
+            scroll-behavior: auto;
         }
 
         body {
@@ -42,7 +43,7 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.8; /* Increased visibility */
+            opacity: 0.5; /* Slightly reduced for wave subtlety */
         }
 
         .container {
@@ -54,7 +55,7 @@
         }
 
         section {
-            padding: 60px 0;
+            padding: 80px 0;
             border-bottom: 1px dashed var(--border-color);
         }
 
@@ -102,6 +103,7 @@
             border: 2px solid var(--text-primary);
             transition: var(--transition);
             font-size: 0.9rem;
+            cursor: pointer;
         }
 
         .cta-button:hover {
@@ -228,9 +230,9 @@
             <h1>Kushal Gangadhar</h1>
             <p class="hero-subtitle">Student & Maker.</p>
             <div class="nav-links">
-                <a href="#projects" class="cta-button">/projects</a>
-                <a href="#cv" class="cta-button">/cv</a>
-                <a href="#extra" class="cta-button">/off-duty</a>
+                <a href="#projects" class="cta-button js-scroll">/projects</a>
+                <a href="#cv" class="cta-button js-scroll">/cv</a>
+                <a href="#extra" class="cta-button js-scroll">/off-duty</a>
             </div>
         </section>
 
@@ -317,7 +319,7 @@
         <!-- Footer -->
         <footer>
             <p>&copy; 2026 Kushal Gangadhar</p>
-            <a href="#hero" class="link-text" style="color: var(--text-secondary);">back_to_top</a>
+            <a href="#hero" class="link-text js-scroll" style="color: var(--text-secondary);">back_to_top</a>
         </footer>
     </main>
 
@@ -325,51 +327,56 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
 
-        let cats = [];
-        const catEmojis = ['🐱', '😸', '😹', '😻', '😼', '😽', '🐈'];
+        let time = 0;
+        let waves = [];
 
-        class FloatingCat {
+        class Wave {
             constructor() {
                 this.reset();
             }
 
             reset() {
-                this.radius = 20 + Math.random() * 20;
-                this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
-                this.y = Math.random() * (canvas.height - this.radius * 2) + this.radius;
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = (Math.random() - 0.5) * 2;
-                this.angle = Math.random() * Math.PI * 2;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.05;
-                this.emoji = catEmojis[Math.floor(Math.random() * catEmojis.length)];
+                this.amplitude = 20 + Math.random() * 50;
+                this.frequency = 0.005 + Math.random() * 0.01;
+                this.phase = Math.random() * Math.PI * 2;
+                this.speed = 0.01 + Math.random() * 0.02;
+                this.yOffset = canvas.height * 0.3 + Math.random() * (canvas.height * 0.4);
+                this.color = `rgba(177, 156, 217, ${0.1 + Math.random() * 0.2})`;
+                
+                // Targets for "randomly noticeable changes"
+                this.targetAmplitude = this.amplitude;
+                this.targetSpeed = this.speed;
+                this.changeTimer = 0;
             }
 
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.angle += this.rotationSpeed;
+                this.phase += this.speed;
+                
+                // Randomly change targets
+                this.changeTimer--;
+                if (this.changeTimer <= 0) {
+                    this.targetAmplitude = 10 + Math.random() * 80;
+                    this.targetSpeed = 0.005 + Math.random() * 0.03;
+                    this.changeTimer = 100 + Math.random() * 300;
+                }
 
-                // Bounce off edges
-                if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
-                    this.vx *= -1;
-                }
-                if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
-                    this.vy *= -1;
-                }
+                // Smoothly interpolate towards targets
+                this.amplitude += (this.targetAmplitude - this.amplitude) * 0.01;
+                this.speed += (this.targetSpeed - this.speed) * 0.01;
             }
 
             draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                ctx.font = `${this.radius * 2}px serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                // Subtle shadow for better visibility
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'rgba(177, 156, 217, 0.4)';
-                ctx.fillText(this.emoji, 0, 0);
-                ctx.restore();
+                ctx.beginPath();
+                ctx.moveTo(0, this.yOffset);
+
+                for (let x = 0; x < canvas.width; x++) {
+                    const y = this.yOffset + Math.sin(x * this.frequency + this.phase) * this.amplitude;
+                    ctx.lineTo(x, y);
+                }
+
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
             }
         }
 
@@ -377,23 +384,60 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            cats = [];
-            const count = Math.floor((canvas.width * canvas.height) / 50000) + 5; // Adaptive count
-            for (let i = 0; i < count; i++) {
-                cats.push(new FloatingCat());
+            waves = [];
+            for (let i = 0; i < 5; i++) {
+                waves.push(new Wave());
             }
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            cats.forEach(cat => {
-                cat.update();
-                cat.draw();
+            waves.forEach(wave => {
+                wave.update();
+                wave.draw();
             });
 
             requestAnimationFrame(animate);
         }
+
+        // Custom Smooth Scroll Logic
+        function slowSmoothScroll(targetId) {
+            const targetElement = document.querySelector(targetId);
+            if (!targetElement) return;
+
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            const duration = 1500; // 1.5 seconds for a slower feel
+            let start = null;
+
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = timestamp - start;
+                const time = Math.min(progress / duration, 1);
+
+                // Easing function (easeInOutCubic)
+                const ease = time < 0.5 ? 4 * time * time * time : 1 - Math.pow(-2 * time + 2, 3) / 2;
+
+                window.scrollTo(0, startPosition + distance * ease);
+
+                if (progress < duration) {
+                    requestAnimationFrame(step);
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        // Attach scroll listeners
+        document.querySelectorAll('.js-scroll').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                slowSmoothScroll(targetId);
+            });
+        });
 
         window.addEventListener('resize', resize);
         resize();
