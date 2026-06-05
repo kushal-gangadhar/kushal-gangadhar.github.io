@@ -378,7 +378,7 @@
             rotate(ax, ay) { this.angleX += ax; this.angleY += ay; }
             draw() {
                 const offsetX = canvas.width - 200;
-                const offsetY = 200;
+                const offsetY = canvas.height - 200; // Moved to bottom right
                 const perspective = 500;
                 const projected = this.nodes.map(node => {
                     let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
@@ -441,7 +441,7 @@
                 });
                 ctx.beginPath();
                 ctx.lineWidth = 1.5;
-                ctx.strokeStyle = 'rgba(244, 114, 182, 0.4)';
+                ctx.strokeStyle = 'rgba(190, 242, 100, 0.4)'; // Changed to Lime Green
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
@@ -450,8 +450,43 @@
             }
         }
 
+        // Dynamic Curvy Helix
+        class Helix {
+            constructor() {
+                this.points = 100;
+                this.time = 0;
+            }
+            draw() {
+                this.time += 0.02;
+                const formation = (Math.sin(this.time * 0.5) + 1) / 2; // Cycles between 0 and 1
+                
+                ctx.beginPath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'rgba(244, 114, 182, 0.3)'; // Pinkish
+                
+                for(let i = 0; i <= this.points; i++) {
+                    const t = i / this.points;
+                    // Linear path from bottom-left to top-right
+                    const baseX = t * canvas.width * 1.2 - (canvas.width * 0.1);
+                    const baseY = (1 - t) * canvas.height * 1.2 - (canvas.height * 0.1);
+                    
+                    // Curvy spiral offset that "deforms"
+                    const angle = t * Math.PI * 10 + this.time;
+                    const radius = 50 * formation * Math.sin(t * Math.PI + this.time);
+                    
+                    const x = baseX + Math.cos(angle) * radius;
+                    const y = baseY + Math.sin(angle) * radius;
+                    
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+        }
+
         const octa = new Octahedron();
         const d20 = new D20();
+        const helix = new Helix();
 
         class Dot {
             constructor(x, y, color) {
@@ -495,6 +530,7 @@
             dots.forEach(dot => { dot.update(); dot.draw(); });
             octa.rotate(0.008, 0.012); octa.draw();
             d20.rotate(-0.01, 0.005); d20.draw();
+            helix.draw();
             requestAnimationFrame(animate);
         }
 
