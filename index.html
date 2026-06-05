@@ -42,7 +42,7 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.6;
         }
 
         .container {
@@ -54,7 +54,7 @@
         }
 
         section {
-            padding: 80px 0;
+            padding: 60px 0;
             border-bottom: 1px dashed var(--border-color);
         }
 
@@ -64,7 +64,7 @@
 
         /* Hero */
         #hero {
-            height: 60vh;
+            height: 50vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -86,15 +86,22 @@
             margin-bottom: 2rem;
         }
 
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
         .cta-button {
             display: inline-block;
-            padding: 8px 16px;
+            padding: 6px 12px;
             background-color: var(--bg-color);
             color: var(--text-primary);
             text-decoration: none;
             font-weight: bold;
             border: 2px solid var(--text-primary);
             transition: var(--transition);
+            font-size: 0.9rem;
         }
 
         .cta-button:hover {
@@ -104,98 +111,91 @@
             box-shadow: -4px -4px 0px var(--accent-color);
         }
 
-        /* Titles */
+        /* Generic Section Styling */
         h2 {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
             color: var(--text-primary);
             background: var(--accent-color);
             color: white;
-            padding: 4px 12px;
+            padding: 2px 10px;
             display: inline-block;
         }
 
         h3.section-subtitle {
-            font-size: 1rem;
-            margin: 2rem 0 1rem 0;
+            font-size: 0.95rem;
+            margin: 1.5rem 0 0.8rem 0;
             color: var(--text-secondary);
             text-decoration: underline;
         }
 
-        .about-text {
-            font-size: 1rem;
+        .content-text {
+            font-size: 0.95rem;
             max-width: 650px;
         }
 
-        /* Work Cards */
-        .work-grid {
+        /* Cards and Lists */
+        .item-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
 
-        .project-card {
+        .item-card {
             background-color: var(--card-bg);
-            padding: 1.5rem;
+            padding: 1.2rem;
             border: 1px solid var(--border-color);
             transition: var(--transition);
         }
 
-        .project-card:hover {
+        .item-card:hover {
             border-color: var(--text-primary);
             box-shadow: 4px 4px 0px var(--accent-color);
         }
 
-        .project-card h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+        .item-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
         }
 
-        .project-card p {
+        .item-card p {
             color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
         }
 
-        .github-link {
+        .link-text {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             color: var(--text-primary);
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        .github-link:hover {
+        .link-text:hover {
             text-decoration: underline;
         }
 
-        /* Contact */
-        .contact-email {
-            font-size: 1.2rem;
-            color: var(--text-primary);
-            text-decoration: underline;
+        /* Specific Lists */
+        ul.simple-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul.simple-list li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        ul.simple-list li::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
             font-weight: bold;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-
-        .contact-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .social-link {
-            text-decoration: none;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .social-link:hover {
-            color: var(--text-primary);
-            text-decoration: underline;
         }
 
         /* Footer */
@@ -204,17 +204,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
-        }
-
-        .back-to-top {
-            text-decoration: none;
-            color: var(--text-secondary);
-        }
-
-        .back-to-top:hover {
-            color: var(--text-primary);
         }
 
         @media (max-width: 600px) {
@@ -229,15 +220,20 @@
         <!-- Hero Section -->
         <section id="hero">
             <h1>Kushal Gangadhar</h1>
-            <p class="hero-subtitle">Student.</p>
-            <a href="#projects" class="cta-button">/view_projects</a>
+            <p class="hero-subtitle">Student & Maker.</p>
+            <div class="nav-links">
+                <a href="#projects" class="cta-button">/projects</a>
+                <a href="#cv" class="cta-button">/cv</a>
+                <a href="#hobbies" class="cta-button">/hobbies</a>
+                <a href="#playground" class="cta-button">/playground</a>
+            </div>
         </section>
 
         <!-- About Section -->
         <section id="about">
             <h2>About</h2>
-            <p class="about-text">
-                I'm Kushal, a student currently interested in formal verification, distributed computing and learning to build things that make life easier 
+            <p class="content-text">
+                I'm Kushal, a student currently interested in formal verification, distributed computing, and learning to build things that make life easier. I enjoy exploring the intersection of rigorous theory and practical implementation.
             </p>
         </section>
 
@@ -246,25 +242,72 @@
             <h2>Projects</h2>
             
             <h3 class="section-subtitle">Personal Projects</h3>
-            <div class="work-grid">
-                <div class="project-card">
+            <div class="item-grid">
+                <div class="item-card">
                     <h4>Lumina Dashboard</h4>
                     <p>A data visualization engine with real-time streaming and filtering logic.</p>
-                    <a href="https://github.com/#" class="github-link">[view_source]</a>
+                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
                 </div>
-                <div class="project-card">
+                <div class="item-card">
                     <h4>Aura Shop</h4>
                     <p>A headless e-commerce storefront optimized for Core Web Vitals.</p>
-                    <a href="https://github.com/#" class="github-link">[view_source]</a>
+                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
                 </div>
             </div>
 
             <h3 class="section-subtitle">Academic Projects</h3>
-            <div class="work-grid">
-                <div class="project-card">
-                    <h4>Prism Core</h4>
-                    <p>University thesis: TypeScript utility library for accessible UI components.</p>
-                    <a href="https://github.com/#" class="github-link">[view_source]</a>
+            <div class="item-grid">
+                <div class="item-card">
+                    <h4>Formal Verification Research</h4>
+                    <p>Investigating automated proof techniques for distributed consensus protocols.</p>
+                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CV Section -->
+        <section id="cv">
+            <h2>CV</h2>
+            <h3 class="section-subtitle">Education</h3>
+            <div class="item-card" style="margin-bottom: 1rem;">
+                <h4>Degree Program</h4>
+                <p>University Name | 20XX - Present</p>
+                <p>Focusing on Computer Science with an emphasis on verification and systems.</p>
+            </div>
+            
+            <h3 class="section-subtitle">Technical Skills</h3>
+            <ul class="simple-list">
+                <li>Formal Methods (TLA+, Coq/Lean)</li>
+                <li>Systems Programming (Rust, C++)</li>
+                <li>Distributed Systems Design</li>
+                <li>Frontend Exploration (HTML/CSS/JS)</li>
+            </ul>
+        </section>
+
+        <!-- Hobbies Section -->
+        <section id="hobbies">
+            <h2>Hobbies</h2>
+            <p class="content-text" style="margin-bottom: 1rem;">When I'm not in front of a screen, I usually spend my time on:</p>
+            <ul class="simple-list">
+                <li>Reading Sci-Fi & Philosophy</li>
+                <li>Playing Chess (poorly)</li>
+                <li>Experimenting with Electronic Music</li>
+                <li>Urban Exploration & Photography</li>
+            </ul>
+        </section>
+
+        <!-- Playground Section -->
+        <section id="playground">
+            <h2>Playground</h2>
+            <p class="content-text" style="margin-bottom: 1rem;">A space for random experiments and "stuff I've messed around about":</p>
+            <div class="item-grid">
+                <div class="item-card">
+                    <h4>Generative Art Scripts</h4>
+                    <p>Small Python scripts that generate geometric patterns based on simple mathematical rules.</p>
+                </div>
+                <div class="item-card">
+                    <h4>Home Automation Hacks</h4>
+                    <p>Custom firmware for smart bulbs to sync with my music player.</p>
                 </div>
             </div>
         </section>
@@ -272,17 +315,17 @@
         <!-- Contact Section -->
         <section id="contact">
             <h2>Contact</h2>
-            <a href="kushalgangadhariah@gmail.com" class="contact-email">eMail</a>
-            <div class="contact-links">
-                <a href="https://github.com/kushal-gangadhar" class="social-link">GitHub</a>
-                <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="social-link">LinkedIn</a>
+            <a href="mailto:kushalgangadhariah@gmail.com" class="contact-email" style="font-size: 1.1rem; color: var(--text-primary); text-decoration: underline; font-weight: bold; margin-bottom: 1rem; display: block;">eMail</a>
+            <div class="nav-links">
+                <a href="https://github.com/kushal-gangadhar" class="link-text">GitHub</a>
+                <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="link-text">LinkedIn</a>
             </div>
         </section>
 
         <!-- Footer -->
         <footer>
             <p>&copy; 2026 Kushal Gangadhar</p>
-            <a href="#hero" class="back-to-top">back_to_top</a>
+            <a href="#hero" class="link-text" style="color: var(--text-secondary);">back_to_top</a>
         </footer>
     </main>
 
@@ -290,74 +333,116 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
 
-        let particles = [];
-        const particleCount = 50;
-        const connectionDistance = 120;
-        const particleSpeed = 0.3;
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * particleSpeed;
-                this.vy = (Math.random() - 0.5) * particleSpeed;
-                this.radius = Math.random() * 1.5 + 0.5;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        let platforms = [];
+        let cats = [];
+        const catEmoji = ['🐈', '🐈‍⬛', '🐱'];
+        
+        class Platform {
+            constructor(y, width, x) {
+                this.x = x || Math.random() * (canvas.width - width);
+                this.y = y;
+                this.width = width;
             }
 
             draw() {
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(125, 102, 158, 0.2)';
-                ctx.fill();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + this.width, this.y);
+                ctx.strokeStyle = 'rgba(177, 156, 217, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        class Cat {
+            constructor() {
+                this.spawn();
+            }
+
+            spawn() {
+                this.platformIndex = Math.floor(Math.random() * platforms.length);
+                let plat = platforms[this.platformIndex];
+                this.x = plat.x + Math.random() * plat.width;
+                this.y = plat.y - 5;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.emoji = catEmoji[Math.floor(Math.random() * catEmoji.length)];
+                this.state = 'walking'; // walking, resting, jumping
+                this.timer = 0;
+            }
+
+            update() {
+                let plat = platforms[this.platformIndex];
+                
+                if (this.state === 'walking') {
+                    this.x += this.vx;
+                    if (this.x < plat.x || this.x > plat.x + plat.width) {
+                        this.vx *= -1;
+                    }
+                    if (Math.random() < 0.005) {
+                        this.state = 'resting';
+                        this.timer = Math.random() * 200 + 100;
+                    }
+                } else if (this.state === 'resting') {
+                    this.timer--;
+                    if (this.timer <= 0) {
+                        this.state = 'walking';
+                    }
+                }
+
+                // Randomly change platform (simulated jump)
+                if (Math.random() < 0.001) {
+                    this.spawn();
+                }
+            }
+
+            draw() {
+                ctx.font = '20px serif';
+                ctx.fillText(this.emoji, this.x - 10, this.y);
             }
         }
 
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
+            
+            // Create Platforms
+            platforms = [];
+            const rows = 6;
+            for (let i = 1; i <= rows; i++) {
+                let y = (canvas.height / (rows + 1)) * i;
+                platforms.push(new Platform(y, 150 + Math.random() * 200));
             }
+
+            // Draw "Beds" on the sides
+            // These are just visual markers cats could go to
+            
+            cats = [];
+            for (let i = 0; i < 5; i++) {
+                cats.push(new Cat());
+            }
+        }
+
+        function drawBeds() {
+            ctx.font = '30px serif';
+            // Left beds
+            ctx.fillText('🧺', 10, canvas.height * 0.2);
+            ctx.fillText('🧺', 10, canvas.height * 0.8);
+            // Right beds
+            ctx.fillText('🧺', canvas.width - 40, canvas.height * 0.3);
+            ctx.fillText('🧺', canvas.width - 40, canvas.height * 0.7);
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawBeds();
+            
+            platforms.forEach(p => p.draw());
+            cats.forEach(c => {
+                c.update();
+                c.draw();
+            });
 
-            for (let i = 0; i < particles.length; i++) {
-                const p1 = particles[i];
-                p1.update();
-                p1.draw();
-
-                for (let j = i + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const dx = p1.x - p2.x;
-                    const dy = p1.y - p2.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        const opacity = 1 - (dist / connectionDistance);
-                        ctx.strokeStyle = `rgba(125, 102, 158, ${opacity * 0.15})`;
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                    }
-                }
-            }
             requestAnimationFrame(animate);
         }
 
