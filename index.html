@@ -330,6 +330,86 @@
         const dotSpacing = 50; // Grid spacing
         const jitterAmount = 8; // Neighbourhood size
 
+        // 3D Pyramid logic
+        class Pyramid {
+            constructor() {
+                this.size = 150;
+                this.angleX = 0;
+                this.angleY = 0;
+                this.nodes = [
+                    [0, -1, 0],    // Top
+                    [-1, 1, -1],   // Base 1
+                    [1, 1, -1],    // Base 2
+                    [1, 1, 1],     // Base 3
+                    [-1, 1, 1]     // Base 4
+                ];
+                this.edges = [
+                    [0, 1], [0, 2], [0, 3], [0, 4], // Sides
+                    [1, 2], [2, 3], [3, 4], [4, 1]  // Base
+                ];
+            }
+
+            rotate(ax, ay) {
+                this.angleX += ax;
+                this.angleY += ay;
+            }
+
+            draw() {
+                const offsetX = canvas.width - 200; // Top right
+                const offsetY = 200;
+                const perspective = 400;
+
+                const rotatedNodes = this.nodes.map(node => {
+                    let x = node[0] * this.size;
+                    let y = node[1] * this.size;
+                    let z = node[2] * this.size;
+
+                    // Rotate Y
+                    let cosY = Math.cos(this.angleY);
+                    let sinY = Math.sin(this.angleY);
+                    let tempX = x * cosY - z * sinY;
+                    let tempZ = x * sinY + z * cosY;
+                    x = tempX;
+                    z = tempZ;
+
+                    // Rotate X
+                    let cosX = Math.cos(this.angleX);
+                    let sinX = Math.sin(this.angleX);
+                    let tempY = y * cosX - z * sinX;
+                    tempZ = y * sinX + z * cosX;
+                    y = tempY;
+                    z = tempZ;
+
+                    // Project
+                    const scale = perspective / (perspective + z);
+                    return [x * scale + offsetX, y * scale + offsetY];
+                });
+
+                ctx.beginPath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'rgba(177, 156, 217, 0.4)'; // Purple edge
+
+                this.edges.forEach(edge => {
+                    const start = rotatedNodes[edge[0]];
+                    const end = rotatedNodes[edge[1]];
+                    ctx.moveTo(start[0], start[1]);
+                    ctx.lineTo(end[0], end[1]);
+                });
+                ctx.stroke();
+
+                // Add a subtle fill
+                ctx.beginPath();
+                ctx.fillStyle = 'rgba(190, 242, 100, 0.05)'; // Lime tint
+                ctx.moveTo(rotatedNodes[0][0], rotatedNodes[0][1]);
+                ctx.lineTo(rotatedNodes[1][0], rotatedNodes[1][1]);
+                ctx.lineTo(rotatedNodes[2][0], rotatedNodes[2][1]);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        const pyramid = new Pyramid();
+
         class Dot {
             constructor(x, y, color) {
                 this.baseX = x;
@@ -395,6 +475,9 @@
                 dot.update();
                 dot.draw();
             });
+
+            pyramid.rotate(0.01, 0.01);
+            pyramid.draw();
 
             requestAnimationFrame(animate);
         }
