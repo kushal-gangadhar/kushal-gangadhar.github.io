@@ -11,7 +11,8 @@
             --text-primary: #483d8b;
             --text-secondary: #7d669e;
             --accent-color: #b19cd9;
-            --accent-green: #94b49f; /* Added Sage Green */
+            --accent-lime: #bef264; /* Vibrant Lime Green */
+            --accent-pink: #f472b6; /* Matching Pink */
             --border-color: #e0d1f0;
             --transition: all 0.2s ease-in-out;
         }
@@ -328,60 +329,43 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
 
-        let time = 0;
-        let waves = [];
+        let dots = [];
+        const dotSpacing = 50; // Grid spacing
+        const jitterAmount = 8; // Neighbourhood size
 
-        class Wave {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.amplitude = 20 + Math.random() * 50;
-                this.frequency = 0.005 + Math.random() * 0.01;
-                this.phase = Math.random() * Math.PI * 2;
-                this.speed = 0.01 + Math.random() * 0.02;
-                this.yOffset = canvas.height * 0.3 + Math.random() * (canvas.height * 0.4);
+        class Dot {
+            constructor(x, y, color) {
+                this.baseX = x;
+                this.baseY = y;
+                this.color = color;
+                this.x = x;
+                this.y = y;
+                this.radius = 2.5;
                 
-                // Randomly pick between Lavender and Sage Green
-                const isGreen = Math.random() > 0.5;
-                const colorBase = isGreen ? '148, 180, 159' : '177, 156, 217';
-                this.color = `rgba(${colorBase}, ${0.1 + Math.random() * 0.2})`;
-                
-                // Targets for "randomly noticeable changes"
-                this.targetAmplitude = this.amplitude;
-                this.targetSpeed = this.speed;
-                this.changeTimer = 0;
+                // Random offset targets
+                this.targetX = x;
+                this.targetY = y;
+                this.timer = 0;
             }
 
             update() {
-                this.phase += this.speed;
-                
-                // Randomly change targets
-                this.changeTimer--;
-                if (this.changeTimer <= 0) {
-                    this.targetAmplitude = 10 + Math.random() * 80;
-                    this.targetSpeed = 0.005 + Math.random() * 0.03;
-                    this.changeTimer = 100 + Math.random() * 300;
+                this.timer--;
+                if (this.timer <= 0) {
+                    this.targetX = this.baseX + (Math.random() - 0.5) * jitterAmount * 2;
+                    this.targetY = this.baseY + (Math.random() - 0.5) * jitterAmount * 2;
+                    this.timer = 10 + Math.random() * 40;
                 }
 
-                // Smoothly interpolate towards targets
-                this.amplitude += (this.targetAmplitude - this.amplitude) * 0.01;
-                this.speed += (this.targetSpeed - this.speed) * 0.01;
+                // Smooth interpolation to target
+                this.x += (this.targetX - this.x) * 0.05;
+                this.y += (this.targetY - this.y) * 0.05;
             }
 
             draw() {
                 ctx.beginPath();
-                ctx.moveTo(0, this.yOffset);
-
-                for (let x = 0; x < canvas.width; x++) {
-                    const y = this.yOffset + Math.sin(x * this.frequency + this.phase) * this.amplitude;
-                    ctx.lineTo(x, y);
-                }
-
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 2;
-                ctx.stroke();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
             }
         }
 
@@ -389,18 +373,30 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            waves = [];
-            for (let i = 0; i < 5; i++) {
-                waves.push(new Wave());
+            dots = [];
+            const cols = Math.ceil(canvas.width / dotSpacing) + 1;
+            const rows = Math.ceil(canvas.height / dotSpacing) + 1;
+
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    const x = i * dotSpacing;
+                    const y = j * dotSpacing;
+                    
+                    // Alternate colors: Lime Green and Pink
+                    const isLime = (i + j) % 2 === 0;
+                    const color = isLime ? 'rgba(190, 242, 100, 0.4)' : 'rgba(244, 114, 182, 0.4)';
+                    
+                    dots.push(new Dot(x, y, color));
+                }
             }
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            waves.forEach(wave => {
-                wave.update();
-                wave.draw();
+            dots.forEach(dot => {
+                dot.update();
+                dot.draw();
             });
 
             requestAnimationFrame(animate);
