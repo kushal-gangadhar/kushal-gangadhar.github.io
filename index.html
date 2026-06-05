@@ -11,6 +11,7 @@
             --text-primary: #483d8b;
             --text-secondary: #7d669e;
             --accent-color: #b19cd9;
+            --accent-green: #94b49f; /* Added Sage Green */
             --border-color: #e0d1f0;
             --transition: all 0.2s ease-in-out;
         }
@@ -159,7 +160,7 @@
 
         .item-card:hover {
             border-color: var(--text-primary);
-            box-shadow: 6px 6px 0px var(--accent-color);
+            box-shadow: 6px 6px 0px var(--accent-green); /* Changed to green shadow */
         }
 
         .item-card h4 {
@@ -181,10 +182,12 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 1.1rem; /* Increased from 0.85rem */
+            transition: var(--transition);
         }
 
         .link-text:hover {
             text-decoration: underline;
+            color: var(--accent-green); /* Added green hover */
         }
 
         /* Specific Lists */
@@ -204,7 +207,7 @@
             content: ">";
             position: absolute;
             left: 0;
-            color: var(--accent-color);
+            color: var(--accent-green); /* Changed marker to green */
             font-weight: bold;
         }
 
@@ -287,23 +290,17 @@
         <section id="extra">
             <h2 class="merged-title">What i do when i'm not doing the things i've talked about above</h2>
             
-            <h3 class="section-subtitle">Interests & Hobbies</h3>
-            <ul class="simple-list" style="margin-bottom: 1.5rem;">
-                <li>Reading Sci-Fi & Philosophy</li>
-                <li>Playing Chess (poorly)</li>
-                <li>Experimenting with Electronic Music</li>
-                <li>Urban Exploration & Photography</li>
-            </ul>
-
-            <h3 class="section-subtitle">The Playground</h3>
+            
             <div class="item-grid">
                 <div class="item-card">
-                    <h4>Generative Art Scripts</h4>
-                    <p>Small Python scripts that generate geometric patterns based on simple mathematical rules.</p>
+                    <p>I love reading - mostly fiction but sometimes indian non-fiction </p>
+                    <p>Some of my favourite writers are Arundhati Roy, Olga Tokarczuk and Patrick Rothfuss</p>
+                    <p>
+                        Find me on <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-text">StoryGraph</a>
+                    </p>
                 </div>
                 <div class="item-card">
-                    <h4>Home Automation Hacks</h4>
-                    <p>Custom firmware for smart bulbs to sync with my music player.</p>
+                    <p>I also regularly watch anime. Here is my Find me on <a href="https://myanimelist.net/profile/kushalgangs" class="link-text">MAL Account</a> </p>
                 </div>
             </div>
         </section>
@@ -343,7 +340,11 @@
                 this.phase = Math.random() * Math.PI * 2;
                 this.speed = 0.01 + Math.random() * 0.02;
                 this.yOffset = canvas.height * 0.3 + Math.random() * (canvas.height * 0.4);
-                this.color = `rgba(177, 156, 217, ${0.1 + Math.random() * 0.2})`;
+                
+                // Randomly pick between Lavender and Sage Green
+                const isGreen = Math.random() > 0.5;
+                const colorBase = isGreen ? '148, 180, 159' : '177, 156, 217';
+                this.color = `rgba(${colorBase}, ${0.1 + Math.random() * 0.2})`;
                 
                 // Targets for "randomly noticeable changes"
                 this.targetAmplitude = this.amplitude;
