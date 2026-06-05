@@ -6,13 +6,14 @@
     <title>My Personal Website</title>
     <style>
         :root {
-            --bg-color: #ffffff;
-            --text-primary: #111111;
-            --text-secondary: #666666;
-            --accent-color: #000000;
-            --border-color: #eeeeee;
-            --hover-bg: #f5f5f5;
-            --transition: all 0.3s ease;
+            --bg-color: #0a0a0a;
+            --card-bg: #161616;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a1a1aa;
+            --accent-color: #a855f7;
+            --accent-hover: #c084fc;
+            --border-color: #27272a;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -34,13 +35,13 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
         section {
-            padding: 100px 0;
+            padding: 120px 0;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -50,7 +51,7 @@
 
         /* Hero */
         #hero {
-            height: 80vh;
+            height: 85vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -58,139 +59,177 @@
         }
 
         h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
             margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
             font-size: 1.5rem;
             color: var(--text-secondary);
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
         .cta-button {
             display: inline-block;
-            padding: 12px 28px;
+            padding: 14px 32px;
             background-color: var(--accent-color);
             color: white;
             text-decoration: none;
-            font-weight: 500;
-            border-radius: 4px;
+            font-weight: 600;
+            border-radius: 8px;
             transition: var(--transition);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
         }
 
         .cta-button:hover {
+            background-color: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
         }
 
-        /* About */
+        /* Titles */
         h2 {
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 2rem;
-            color: var(--text-secondary);
+            letter-spacing: 0.2em;
+            margin-bottom: 3rem;
+            color: var(--accent-color);
+            font-weight: 700;
         }
 
         .about-text {
-            font-size: 1.25rem;
-            max-width: 600px;
+            font-size: 1.4rem;
+            max-width: 700px;
+            color: var(--text-primary);
+            font-weight: 400;
         }
 
-        /* Work */
+        /* Work Cards */
         .work-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
         }
 
         .project-card {
-            padding: 2rem;
+            background-color: var(--card-bg);
+            padding: 2.5rem;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 16px;
             transition: var(--transition);
-            text-decoration: none;
-            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .project-card:hover {
             border-color: var(--accent-color);
-            background-color: var(--hover-bg);
-            transform: scale(1.01);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 40px -10px rgba(168, 85, 247, 0.15);
         }
 
         .project-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
         }
 
         .project-card p {
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            flex-grow: 1;
         }
 
-        .learn-more {
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: underline;
-        }
-
-        /* Contact */
-        .contact-links {
+        .github-link {
             display: flex;
-            gap: 1.5rem;
             align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .contact-email {
-            font-size: 1.5rem;
+            gap: 0.75rem;
             color: var(--text-primary);
             text-decoration: none;
             font-weight: 600;
-            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .github-link:hover {
+            color: var(--accent-color);
+        }
+
+        .github-link svg {
+            transition: var(--transition);
+        }
+
+        .github-link:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* Contact */
+        .contact-email {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 800;
+            margin-bottom: 2rem;
             display: block;
+            transition: var(--transition);
+        }
+
+        .contact-email:hover {
+            color: var(--accent-color);
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .social-link {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
             text-decoration: none;
             color: var(--text-secondary);
+            font-weight: 500;
             transition: var(--transition);
         }
 
         .social-link:hover {
-            color: var(--accent-color);
+            color: var(--text-primary);
         }
 
         /* Footer */
         footer {
-            padding: 40px 0;
+            padding: 60px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-secondary);
         }
 
         .back-to-top {
             text-decoration: none;
             color: var(--text-secondary);
+            transition: var(--transition);
         }
 
         .back-to-top:hover {
-            text-decoration: underline;
+            color: var(--accent-color);
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .hero-subtitle { font-size: 1.2rem; }
-            section { padding: 60px 0; }
+        @media (max-width: 768px) {
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+            section { padding: 80px 0; }
         }
     </style>
 </head>
@@ -201,36 +240,51 @@
         <section id="hero">
             <h1>Alex Doe</h1>
             <p class="hero-subtitle">Designer. Developer. Creator.</p>
-            <a href="#work" class="cta-button">View work</a>
+            <a href="#work" class="cta-button">View projects</a>
         </section>
 
         <!-- About Section -->
         <section id="about">
             <h2>About</h2>
             <p class="about-text">
-                I’m Alex, a product designer based in San Francisco. I specialize in building minimal, high-performance web experiences that bridge the gap between design and code.
+                I’m Alex, a product designer based in San Francisco. I build immersive digital experiences using code and creative strategy, with a focus on modern minimalism and high performance.
             </p>
         </section>
 
         <!-- Work Section -->
         <section id="work">
-            <h2>Selected Work</h2>
+            <h2>Projects</h2>
             <div class="work-grid">
-                <a href="#" class="project-card">
-                    <h3>Project One</h3>
-                    <p>A data visualization dashboard built for modern analytics teams.</p>
-                    <span class="learn-more">Learn more</span>
-                </a>
-                <a href="#" class="project-card">
-                    <h3>Project Two</h3>
-                    <p>Minimalist e-commerce platform focused on speed and typography.</p>
-                    <span class="learn-more">Learn more</span>
-                </a>
-                <a href="#" class="project-card">
-                    <h3>Project Three</h3>
-                    <p>Open source library for building responsive design systems.</p>
-                    <span class="learn-more">Learn more</span>
-                </a>
+                <div class="project-card">
+                    <div>
+                        <h3>Lumina Dashboard</h3>
+                        <p>A high-performance data visualization engine with real-time streaming capabilities and advanced filtering logic.</p>
+                    </div>
+                    <a href="https://github.com/#" class="github-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        View on GitHub
+                    </a>
+                </div>
+                <div class="project-card">
+                    <div>
+                        <h3>Aura Shop</h3>
+                        <p>A headless e-commerce storefront optimized for Core Web Vitals, featuring a bespoke animation system.</p>
+                    </div>
+                    <a href="https://github.com/#" class="github-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        View on GitHub
+                    </a>
+                </div>
+                <div class="project-card">
+                    <div>
+                        <h3>Prism Core</h3>
+                        <p>A TypeScript-first utility library for building accessible, themeable UI components from scratch.</p>
+                    </div>
+                    <a href="https://github.com/#" class="github-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        View on GitHub
+                    </a>
+                </div>
             </div>
         </section>
 
