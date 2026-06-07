@@ -261,16 +261,22 @@
             position: fixed;
             top: 40px;
             right: 40px;
-            width: 100px;
-            height: 180px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border);
+            width: 120px; /* Increased 20% */
+            height: 220px; /* Scaled */
+            background: rgba(255, 255, 255, 0.2); /* Blend with background */
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             z-index: 1000;
             overflow: hidden;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 4px 24px rgba(177, 156, 217, 0.1);
             pointer-events: none;
+            opacity: 0; /* Hidden initially */
+            transition: opacity 2s ease;
+        }
+
+        #minimap-container.visible {
+            opacity: 1;
         }
 
         #minimap-canvas {
@@ -487,10 +493,25 @@
             heatPoints.push({
                 x: e.clientX / window.innerWidth,
                 y: (e.clientY + window.scrollY) / document.documentElement.scrollHeight,
-                age: 0
+                age: 0,
+                type: 'move'
             });
             if (heatPoints.length > maxHeatPoints) heatPoints.shift();
         });
+
+        document.addEventListener('click', (e) => {
+            heatPoints.push({
+                x: e.clientX / window.innerWidth,
+                y: (e.clientY + window.scrollY) / document.documentElement.scrollHeight,
+                age: -1000, // Persistent click
+                type: 'click'
+            });
+        });
+
+        // Show minimap after 40 seconds
+        setTimeout(() => {
+            document.getElementById('minimap-container').classList.add('visible');
+        }, 40000);
 
         // --- Background 3D Animation ---
         const canvas = document.getElementById('bg-canvas');
@@ -525,7 +546,7 @@
             }
         }
 
-        // Hand-drawn Arrow Logic (Bent / Curved)
+        // Hand-drawn Arrow Logic (Bent / Curved / 4th Quadrant)
         class Arrow {
             constructor() {
                 this.reset();
@@ -537,48 +558,50 @@
                 this.timer = 0;
                 this.spawnTimer = 480 + Math.random() * 200;
                 
-                // Target is D20 boundary (approx radius 110-120)
                 this.targetX = 140;
                 this.targetY = 140;
                 
-                const angle = Math.random() * Math.PI * 2;
-                const distance = 250 + Math.random() * 100;
-                this.startX = this.targetX + Math.cos(angle) * distance;
-                this.startY = this.targetY + Math.sin(angle) * distance;
+                // Strictly 4th Quadrant (bottom-right: angle 0 to PI/2)
+                const angle = Math.random() * (Math.PI / 2);
                 
-                // End just before the die
-                this.endX = this.targetX + Math.cos(angle) * 110;
-                this.endY = this.targetY + Math.sin(angle) * 110;
+                // Short arrows: start a little away, end at boundary
+                const distanceStart = 150 + Math.random() * 40;
+                const distanceEnd = 115;
                 
-                // Control point for "bent" look
-                const midAngle = angle + (Math.random() - 0.5) * 0.8;
-                this.cpX = (this.startX + this.endX) / 2 + Math.cos(midAngle) * 60;
-                this.cpY = (this.startY + this.endY) / 2 + Math.sin(midAngle) * 60;
+                this.startX = this.targetX + Math.cos(angle) * distanceStart;
+                this.startY = this.targetY + Math.sin(angle) * distanceStart;
+                
+                this.endX = this.targetX + Math.cos(angle) * distanceEnd;
+                this.endY = this.targetY + Math.sin(angle) * distanceEnd;
+                
+                // Bend control point
+                const midAngle = angle - 0.2;
+                this.cpX = (this.startX + this.endX) / 2 + Math.cos(midAngle) * 20;
+                this.cpY = (this.startY + this.endY) / 2 + Math.sin(midAngle) * 20;
 
                 this.points = this.generateSketchPath();
             }
             generateSketchPath() {
                 const pts = [];
-                const steps = 25;
+                const steps = 15;
                 for(let i=0; i<=steps; i++) {
                     const t = i/steps;
-                    // Quadratic Bezier
                     const x = (1-t)*(1-t)*this.startX + 2*(1-t)*t*this.cpX + t*t*this.endX;
                     const y = (1-t)*(1-t)*this.startY + 2*(1-t)*t*this.cpY + t*t*this.endY;
-                    pts.push({ x: x + (Math.random()-0.5)*3, y: y + (Math.random()-0.5)*3 });
+                    pts.push({ x: x + (Math.random()-0.5)*2, y: y + (Math.random()-0.5)*2 });
                 }
                 
                 const angle = Math.atan2(this.endY - this.cpY, this.endX - this.cpX);
-                const headLen = 15;
+                const headLen = 12;
                 pts.push('HEAD');
                 pts.push({
-                    x: this.endX - Math.cos(angle - 0.5) * headLen + (Math.random()-0.5)*4,
-                    y: this.endY - Math.sin(angle - 0.5) * headLen + (Math.random()-0.5)*4
+                    x: this.endX - Math.cos(angle - 0.4) * headLen + (Math.random()-0.5)*3,
+                    y: this.endY - Math.sin(angle - 0.4) * headLen + (Math.random()-0.5)*3
                 });
                 pts.push('HEAD2');
                 pts.push({
-                    x: this.endX - Math.cos(angle + 0.5) * headLen + (Math.random()-0.5)*4,
-                    y: this.endY - Math.sin(angle + 0.5) * headLen + (Math.random()-0.5)*4
+                    x: this.endX - Math.cos(angle + 0.4) * headLen + (Math.random()-0.5)*3,
+                    y: this.endY - Math.sin(angle + 0.4) * headLen + (Math.random()-0.5)*3
                 });
                 return pts;
             }
@@ -589,13 +612,13 @@
                     return;
                 }
                 if (this.state === 'in') {
-                    this.opacity += 0.02;
-                    if (this.opacity >= 1) { this.opacity = 1; this.state = 'visible'; this.timer = 120; }
+                    this.opacity += 0.03;
+                    if (this.opacity >= 1) { this.opacity = 1; this.state = 'visible'; this.timer = 100; }
                 } else if (this.state === 'visible') {
                     this.timer--;
                     if (this.timer <= 0) this.state = 'out';
                 } else if (this.state === 'out') {
-                    this.opacity -= 0.02;
+                    this.opacity -= 0.03;
                     if (this.opacity <= 0) this.reset();
                 }
             }
@@ -603,8 +626,8 @@
                 if (!this.active) return;
                 ctx.save();
                 ctx.globalAlpha = this.opacity;
-                ctx.strokeStyle = 'rgba(45, 42, 61, 0.5)';
-                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = 'rgba(45, 42, 61, 0.4)';
+                ctx.lineWidth = 1.2;
                 ctx.beginPath();
                 ctx.moveTo(this.points[0].x, this.points[0].y);
                 for(let i=1; i<this.points.length; i++) {
@@ -772,6 +795,7 @@
             const viewH = window.innerHeight;
             const scrollY = window.scrollY;
 
+            // Draw Sections
             mctx.fillStyle = 'rgba(45, 42, 61, 0.08)';
             document.querySelectorAll('section').forEach(sec => {
                 const rect = sec.getBoundingClientRect();
@@ -780,15 +804,24 @@
                 mctx.fillRect(15, top, w - 30, height);
             });
 
+            // Draw Viewport
             mctx.strokeStyle = 'rgba(177, 156, 217, 0.6)';
             mctx.lineWidth = 2;
             mctx.strokeRect(8, scrollY / totalH * h, w - 16, viewH / totalH * h);
 
+            // Draw Heatmap (Persistent tracking)
             heatPoints.forEach(p => {
-                p.age += 0.4;
-                const alpha = Math.max(0, 0.7 - p.age / 120);
-                mctx.fillStyle = `rgba(244, 114, 182, ${alpha})`;
-                mctx.beginPath(); mctx.arc(p.x * w, p.y * h, 3, 0, Math.PI * 2); mctx.fill();
+                if (p.type === 'move') {
+                    p.age += 0.4;
+                    // Movements fade but stay visible longer
+                    const alpha = Math.max(0.05, 0.6 - p.age / 500); 
+                    mctx.fillStyle = `rgba(244, 114, 182, ${alpha})`; // Pink
+                    mctx.beginPath(); mctx.arc(p.x * w, p.y * h, 2, 0, Math.PI * 2); mctx.fill();
+                } else if (p.type === 'click') {
+                    // Clicks are persistent (age doesn't increase)
+                    mctx.fillStyle = 'rgba(190, 242, 100, 0.8)'; // Lime
+                    mctx.beginPath(); mctx.arc(p.x * w, p.y * h, 4, 0, Math.PI * 2); mctx.fill();
+                }
             });
         }
 
