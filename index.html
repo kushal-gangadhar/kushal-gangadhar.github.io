@@ -460,6 +460,9 @@
         let dots = [];
         const dotSpacing = 80;
         const jitterAmount = 6;
+        let cols = 0, rows = 0;
+        let pathWalkers = [];
+        let spawnTimer = 0;
 
         class Dot {
             constructor(x, y, color) {
@@ -480,6 +483,68 @@
             draw() {
                 ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color; ctx.fill();
+            }
+        }
+
+        class PathWalker {
+            constructor(gridX, gridY, stepsTaken = 0) {
+                this.gridX = gridX; this.gridY = gridY;
+                this.startX = gridX * dotSpacing; this.startY = gridY * dotSpacing;
+                this.targetX = this.startX; this.targetY = this.startY;
+                this.stepsTaken = stepsTaken;
+                this.progress = 1;
+                this.speed = 0.012 + Math.random() * 0.008;
+                this.alpha = 0; this.targetAlpha = 0.4;
+                this.dead = false;
+            }
+            update() {
+                if (this.alpha < this.targetAlpha) this.alpha += 0.01;
+                if (this.progress < 1) {
+                    this.progress += this.speed;
+                    if (this.progress >= 1) {
+                        this.progress = 1;
+                        this.startX = this.targetX; this.startY = this.targetY;
+                        this.stepsTaken++;
+                        if (this.stepsTaken % 5 === 0) this.split();
+                        else this.setNextTarget();
+                    }
+                } else {
+                    this.setNextTarget();
+                }
+                if (this.dead) this.alpha -= 0.02;
+            }
+            setNextTarget() {
+                const canMoveLeft = this.gridX > 0;
+                const canMoveDown = this.gridY < rows - 1;
+                if (!canMoveLeft && !canMoveDown) { this.dead = true; return; }
+                if (canMoveLeft && canMoveDown) {
+                    if (Math.random() > 0.5) this.gridX--; else this.gridY++;
+                } else if (canMoveLeft) this.gridX--; else this.gridY++;
+                this.targetX = this.gridX * dotSpacing;
+                this.targetY = this.gridY * dotSpacing;
+                this.progress = 0;
+            }
+            split() {
+                const canMoveLeft = this.gridX > 0;
+                const canMoveDown = this.gridY < rows - 1;
+                if (canMoveLeft && canMoveDown) {
+                    this.gridX--; this.targetX = this.gridX * dotSpacing; this.targetY = this.gridY * dotSpacing;
+                    this.progress = 0;
+                    const sibling = new PathWalker(this.gridX + 1, this.gridY, this.stepsTaken);
+                    sibling.gridY++; sibling.targetX = sibling.gridX * dotSpacing;
+                    sibling.targetY = sibling.gridY * dotSpacing; sibling.progress = 0;
+                    pathWalkers.push(sibling);
+                } else {
+                    this.setNextTarget();
+                }
+            }
+            draw() {
+                const x = this.startX + (this.targetX - this.startX) * this.progress;
+                const y = this.startY + (this.targetY - this.startY) * this.progress;
+                ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(163, 213, 255, ${this.alpha})`;
+                ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(163, 213, 255, 0.4)';
+                ctx.fill(); ctx.shadowBlur = 0;
             }
         }
 
