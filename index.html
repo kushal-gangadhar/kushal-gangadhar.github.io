@@ -839,40 +839,13 @@
         }
 
         // --- Interaction Logic ---
-        let d20Cooldown = false;
-        let toastTimeout = null;
-
         function copyEmail(e) {
             e.preventDefault();
             const email = "kushalgangadhariah@gmail.com";
             navigator.clipboard.writeText(email).then(() => {
-                showToast("<strong>Status: Connected</strong> My email address is now on your clipboard.");
+                alert("My email address is now on your clipboard.");
             });
         }
-
-        function showToast(content) {
-            const toast = document.getElementById('toast');
-            if (toastTimeout) clearTimeout(toastTimeout);
-            toast.classList.remove('show');
-            setTimeout(() => {
-                toast.innerHTML = content;
-                toast.classList.add('show');
-                toastTimeout = setTimeout(() => {
-                    toast.classList.remove('show');
-                    toastTimeout = null;
-                }, 6000);
-            }, 50);
-        }
-
-        document.getElementById('die-zone').addEventListener('click', () => {
-            if (d20Cooldown) return;
-            d20Cooldown = true;
-            const roll = Math.floor(Math.random() * 20) + 1;
-            const facts = d20Facts[roll];
-            const fact = facts[Math.floor(Math.random() * facts.length)];
-            showToast(`<strong>Reality Check: ${roll}</strong> ${fact}`);
-            setTimeout(() => { d20Cooldown = false; }, 1200);
-        });
 
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
@@ -884,8 +857,5 @@
         resize();
         animate();
     </script>
-</body>
-</html>
-ipt>
 </body>
 </html>
