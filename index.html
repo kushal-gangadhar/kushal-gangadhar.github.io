@@ -493,12 +493,12 @@
                 this.targetX = this.startX; this.targetY = this.startY;
                 this.stepsTaken = stepsTaken;
                 this.progress = 1;
-                this.speed = 0.012 + Math.random() * 0.008;
-                this.alpha = 0; this.targetAlpha = 0.4;
+                this.speed = 0.015 + Math.random() * 0.01;
+                this.alpha = 0; this.targetAlpha = 0.7; // Increased visibility
                 this.dead = false;
             }
             update() {
-                if (this.alpha < this.targetAlpha) this.alpha += 0.01;
+                if (this.alpha < this.targetAlpha) this.alpha += 0.02;
                 if (this.progress < 1) {
                     this.progress += this.speed;
                     if (this.progress >= 1) {
@@ -541,9 +541,19 @@
             draw() {
                 const x = this.startX + (this.targetX - this.startX) * this.progress;
                 const y = this.startY + (this.targetY - this.startY) * this.progress;
-                ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(163, 213, 255, ${this.alpha})`;
-                ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(163, 213, 255, 0.4)';
+                
+                // Draw trailing edge (Glow effect)
+                ctx.beginPath();
+                ctx.moveTo(this.startX, this.startY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = `rgba(163, 213, 255, ${this.alpha * 1.2})`;
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                // Draw the head dot
+                ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                ctx.shadowBlur = 12; ctx.shadowColor = 'rgba(163, 213, 255, 0.9)';
                 ctx.fill(); ctx.shadowBlur = 0;
             }
         }
@@ -793,9 +803,9 @@
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            cols = Math.ceil(canvas.width / dotSpacing) + 1;
+            rows = Math.ceil(canvas.height / dotSpacing) + 1;
             dots = [];
-            const cols = Math.ceil(canvas.width / dotSpacing) + 1;
-            const rows = Math.ceil(canvas.height / dotSpacing) + 1;
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
                     const x = i * dotSpacing, y = j * dotSpacing;
@@ -813,6 +823,15 @@
             for(let x=0; x<canvas.width; x+=dotSpacing) { ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); }
             for(let y=0; y<canvas.height; y+=dotSpacing) { ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); }
             ctx.stroke();
+
+            // Path Walkers Wave
+            spawnTimer--;
+            if (spawnTimer <= 0) {
+                pathWalkers.push(new PathWalker(cols - 1, 0));
+                spawnTimer = 240; // Spawn every 4 seconds approx
+            }
+            pathWalkers = pathWalkers.filter(p => !p.dead || p.alpha > 0);
+            pathWalkers.forEach(p => { p.update(); p.draw(); });
 
             morpher.rotate(-0.0024, 0.0012);
             morpher.update();
