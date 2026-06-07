@@ -256,6 +256,28 @@
             color: var(--accent-purple);
         }
 
+        /* Minimap & Heatmap */
+        #minimap-container {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            width: 100px;
+            height: 180px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            z-index: 1000;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            pointer-events: none;
+        }
+
+        #minimap-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
         /* Die Interaction Zone */
         #die-zone {
             position: fixed;
@@ -449,10 +471,33 @@
         </footer>
     </main>
 
+    <div id="minimap-container">
+        <canvas id="minimap-canvas"></canvas>
+    </div>
+
     <script>
+        // --- Heatmap Data ---
+        const heatPoints = [];
+        const maxHeatPoints = 200;
+        let mouseX = 0, mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            heatPoints.push({
+                x: e.clientX / window.innerWidth,
+                y: (e.clientY + window.scrollY) / document.documentElement.scrollHeight,
+                age: 0
+            });
+            if (heatPoints.length > maxHeatPoints) heatPoints.shift();
+        });
+
         // --- Background 3D Animation ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
+
+        const minimapCanvas = document.getElementById('minimap-canvas');
+        const mctx = minimapCanvas.getContext('2d');
 
         let dots = [];
         const dotSpacing = 80;
@@ -480,7 +525,7 @@
             }
         }
 
-        // Hand-drawn Arrow Logic
+        // Hand-drawn Arrow Logic (Bent / Curved)
         class Arrow {
             constructor() {
                 this.reset();
@@ -488,64 +533,64 @@
             reset() {
                 this.active = false;
                 this.opacity = 0;
-                this.state = 'hidden'; // 'in', 'visible', 'out'
+                this.state = 'hidden';
                 this.timer = 0;
-                this.spawnTimer = 480 + Math.random() * 200; // ~8 seconds
+                this.spawnTimer = 480 + Math.random() * 200;
                 
-                // Point towards D20 (140, 140)
+                // Target is D20 boundary (approx radius 110-120)
                 this.targetX = 140;
                 this.targetY = 140;
                 
                 const angle = Math.random() * Math.PI * 2;
-                const distance = 250 + Math.random() * 150;
+                const distance = 250 + Math.random() * 100;
                 this.startX = this.targetX + Math.cos(angle) * distance;
                 this.startY = this.targetY + Math.sin(angle) * distance;
                 
-                // Jitter points for hand-drawn look
+                // End just before the die
+                this.endX = this.targetX + Math.cos(angle) * 110;
+                this.endY = this.targetY + Math.sin(angle) * 110;
+                
+                // Control point for "bent" look
+                const midAngle = angle + (Math.random() - 0.5) * 0.8;
+                this.cpX = (this.startX + this.endX) / 2 + Math.cos(midAngle) * 60;
+                this.cpY = (this.startY + this.endY) / 2 + Math.sin(midAngle) * 60;
+
                 this.points = this.generateSketchPath();
             }
             generateSketchPath() {
                 const pts = [];
-                const steps = 15;
-                const dx = this.targetX - this.startX;
-                const dy = this.targetY - this.startY;
-                
+                const steps = 25;
                 for(let i=0; i<=steps; i++) {
                     const t = i/steps;
-                    pts.push({
-                        x: this.startX + dx * t + (Math.random()-0.5)*5,
-                        y: this.startY + dy * t + (Math.random()-0.5)*5
-                    });
+                    // Quadratic Bezier
+                    const x = (1-t)*(1-t)*this.startX + 2*(1-t)*t*this.cpX + t*t*this.endX;
+                    const y = (1-t)*(1-t)*this.startY + 2*(1-t)*t*this.cpY + t*t*this.endY;
+                    pts.push({ x: x + (Math.random()-0.5)*3, y: y + (Math.random()-0.5)*3 });
                 }
                 
-                // Arrow head lines
-                const angle = Math.atan2(dy, dx);
-                const headLen = 25;
+                const angle = Math.atan2(this.endY - this.cpY, this.endX - this.cpX);
+                const headLen = 15;
                 pts.push('HEAD');
                 pts.push({
-                    x: this.targetX - Math.cos(angle - 0.4) * headLen + (Math.random()-0.5)*5,
-                    y: this.targetY - Math.sin(angle - 0.4) * headLen + (Math.random()-0.5)*5
+                    x: this.endX - Math.cos(angle - 0.5) * headLen + (Math.random()-0.5)*4,
+                    y: this.endY - Math.sin(angle - 0.5) * headLen + (Math.random()-0.5)*4
                 });
                 pts.push('HEAD2');
                 pts.push({
-                    x: this.targetX - Math.cos(angle + 0.4) * headLen + (Math.random()-0.5)*5,
-                    y: this.targetY - Math.sin(angle + 0.4) * headLen + (Math.random()-0.5)*5
+                    x: this.endX - Math.cos(angle + 0.5) * headLen + (Math.random()-0.5)*4,
+                    y: this.endY - Math.sin(angle + 0.5) * headLen + (Math.random()-0.5)*4
                 });
                 return pts;
             }
             update() {
                 if (!this.active) {
                     this.spawnTimer--;
-                    if (this.spawnTimer <= 0) {
-                        this.active = true;
-                        this.state = 'in';
-                    }
+                    if (this.spawnTimer <= 0) { this.active = true; this.state = 'in'; }
                     return;
                 }
-
                 if (this.state === 'in') {
                     this.opacity += 0.02;
-                    if (this.opacity >= 1) { this.opacity = 1; this.state = 'visible'; this.timer = 180; }
+                    if (this.opacity >= 1) { this.opacity = 1; this.state = 'visible'; this.timer = 120; }
                 } else if (this.state === 'visible') {
                     this.timer--;
                     if (this.timer <= 0) this.state = 'out';
@@ -558,20 +603,15 @@
                 if (!this.active) return;
                 ctx.save();
                 ctx.globalAlpha = this.opacity;
-                ctx.strokeStyle = 'rgba(45, 42, 61, 0.4)';
-                ctx.lineWidth = 2;
-                ctx.lineCap = 'round';
+                ctx.strokeStyle = 'rgba(45, 42, 61, 0.5)';
+                ctx.lineWidth = 1.5;
                 ctx.beginPath();
                 ctx.moveTo(this.points[0].x, this.points[0].y);
-                
-                let mode = 'line';
                 for(let i=1; i<this.points.length; i++) {
                     if (this.points[i] === 'HEAD') {
-                        ctx.stroke(); ctx.beginPath();
-                        ctx.moveTo(this.targetX, this.targetY); mode = 'h1';
+                        ctx.stroke(); ctx.beginPath(); ctx.moveTo(this.endX, this.endY);
                     } else if (this.points[i] === 'HEAD2') {
-                        ctx.stroke(); ctx.beginPath();
-                        ctx.moveTo(this.targetX, this.targetY); mode = 'h2';
+                        ctx.stroke(); ctx.beginPath(); ctx.moveTo(this.endX, this.endY);
                     } else {
                         ctx.lineTo(this.points[i].x, this.points[i].y);
                     }
@@ -588,64 +628,74 @@
                 this.size = this.baseSize;
                 this.angleX = 0; this.angleY = 0;
                 this.rotationCount = 0;
-                this.transitioning = false;
-                this.phase = 'rotating'; // 'collapsing', 'expanding'
+                this.phase = 'rotating';
+                this.hovered = false;
                 
                 this.shapes = [
-                    { // Octahedron
-                        nodes: [[0,-1.2,0], [0,1.2,0], [1,0,0], [0,0,1], [-1,0,0], [0,0,-1]],
-                        edges: [[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,3],[3,4],[4,5],[5,2]],
-                        color: 'rgba(177, 156, 217, 0.4)'
-                    },
-                    { // Cube
-                        nodes: [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],
-                        edges: [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]],
-                        color: 'rgba(163, 213, 255, 0.4)'
-                    },
-                    { // Tetrahedron
-                        nodes: [[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],
-                        edges: [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]],
-                        color: 'rgba(244, 114, 182, 0.4)'
-                    }
+                    { nodes: [[0,-1.2,0], [0,1.2,0], [1,0,0], [0,0,1], [-1,0,0], [0,0,-1]],
+                      edges: [[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,3],[3,4],[4,5],[5,2]],
+                      color: [177, 156, 217] },
+                    { nodes: [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],
+                      edges: [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]],
+                      color: [163, 213, 255] },
+                    { nodes: [[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],
+                      edges: [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]],
+                      color: [244, 114, 182] }
                 ];
                 this.currentShapeIdx = 0;
                 this.targetShapeIdx = 1;
+                this.t = 0; 
             }
 
             rotate(ax, ay) {
-                this.angleX += ax; this.angleY += ay;
-                this.rotationCount += Math.abs(ax) + Math.abs(ay);
+                const speedMult = this.hovered ? 1.5 : 1.0;
+                this.angleX += ax * speedMult; 
+                this.angleY += ay * speedMult;
+                this.rotationCount += (Math.abs(ax) + Math.abs(ay)) * speedMult;
                 
-                // After roughly one full rotation (normalized)
-                if (this.phase === 'rotating' && this.rotationCount > 6) {
+                if (this.phase === 'rotating' && this.rotationCount > 8) {
                     this.phase = 'collapsing';
+                    this.t = 0;
                 }
             }
 
             update() {
+                const speed = (this.hovered ? 0.03 : 0.02);
+                const offsetX = canvas.width * 0.85;
+                const offsetY = canvas.height * 0.8;
+                const dx = mouseX - offsetX, dy = mouseY - offsetY;
+                this.hovered = Math.hypot(dx, dy) < 200;
+
                 if (this.phase === 'collapsing') {
-                    this.size -= 4;
-                    if (this.size <= 0) {
-                        this.size = 0;
+                    this.t += speed;
+                    const ease = this.t < 0.5 ? 4 * this.t * this.t * this.t : 1 - Math.pow(-2 * this.t + 2, 3) / 2;
+                    this.size = this.baseSize * (1 - ease);
+                    if (this.t >= 1) {
+                        this.t = 0; this.size = 0;
                         this.currentShapeIdx = this.targetShapeIdx;
                         this.targetShapeIdx = (this.targetShapeIdx + 1) % this.shapes.length;
                         this.phase = 'expanding';
                     }
                 } else if (this.phase === 'expanding') {
-                    this.size += 4;
-                    if (this.size >= this.baseSize) {
-                        this.size = this.baseSize;
-                        this.phase = 'rotating';
-                        this.rotationCount = 0;
+                    this.t += speed;
+                    const ease = this.t < 0.5 ? 4 * this.t * this.t * this.t : 1 - Math.pow(-2 * this.t + 2, 3) / 2;
+                    this.size = this.baseSize * ease;
+                    if (this.t >= 1) {
+                        this.t = 0; this.size = this.baseSize;
+                        this.phase = 'rotating'; this.rotationCount = 0;
                     }
                 }
             }
 
             draw() {
                 const shape = this.shapes[this.currentShapeIdx];
+                const nextShape = this.shapes[this.targetShapeIdx];
                 const offsetX = canvas.width * 0.85;
                 const offsetY = canvas.height * 0.8;
-                const perspective = 700;
+                const c1 = shape.color, c2 = nextShape.color;
+                const r = Math.round(c1[0] + (c2[0] - c1[0]) * this.t);
+                const g = Math.round(c1[1] + (c2[1] - c1[1]) * this.t);
+                const b = Math.round(c1[2] + (c2[2] - c1[2]) * this.t);
 
                 const projected = shape.nodes.map(node => {
                     let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
@@ -655,13 +705,11 @@
                     let cX = Math.cos(this.angleX), sX = Math.sin(this.angleX);
                     let ty = y * cX - z * sX; tz = y * sX + z * cX;
                     y = ty; z = tz;
-                    const scale = perspective / (perspective + z);
+                    const scale = 700 / (700 + z);
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
 
-                ctx.beginPath();
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = shape.color;
+                ctx.beginPath(); ctx.lineWidth = 1.5; ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.5)`;
                 shape.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
@@ -670,12 +718,9 @@
             }
         }
 
-        // 20-sided Die (Icosahedron)
         class D20 {
             constructor() {
-                this.size = 160;
-                this.angleX = 0;
-                this.angleY = 0;
+                this.size = 160; this.angleX = 0; this.angleY = 0;
                 const phi = (1 + Math.sqrt(5)) / 2;
                 this.nodes = [
                     [0, 1, phi], [0, 1, -phi], [0, -1, phi], [0, -1, -phi],
@@ -693,25 +738,21 @@
                     }
                 }
             }
-
             rotate(ax, ay) { this.angleX += ax; this.angleY += ay; }
-
             draw() {
-                const offsetX = 140, offsetY = 140, perspective = 700;
+                const offsetX = 140, offsetY = 140;
                 const projected = this.nodes.map(node => {
                     let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
                     let cY = Math.cos(this.angleY), sY = Math.sin(this.angleY);
                     let tx = x * cY - z * sY, tz = x * sY + z * cY;
-                    x = tx, z = tz;
+                    x = tx; z = tz;
                     let cX = Math.cos(this.angleX), sX = Math.sin(this.angleX);
-                    let ty = y * cX - z * sX; tz = y * sX + z * cX;
-                    y = ty, z = tz;
-                    const scale = perspective / (perspective + z);
+                    let ty = y * cX - z * sX; ty = y * sX + z * cX;
+                    y = ty; z = tz;
+                    const scale = 700 / (700 + z);
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
-                ctx.beginPath();
-                ctx.lineWidth = 2.5;
-                ctx.strokeStyle = 'rgba(190, 242, 100, 0.7)';
+                ctx.beginPath(); ctx.lineWidth = 2.5; ctx.strokeStyle = 'rgba(190, 242, 100, 0.7)';
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
@@ -724,198 +765,69 @@
         const d20 = new D20();
         const hintArrow = new Arrow();
 
+        function drawMinimap() {
+            const w = minimapCanvas.width, h = minimapCanvas.height;
+            mctx.clearRect(0, 0, w, h);
+            const totalH = document.documentElement.scrollHeight;
+            const viewH = window.innerHeight;
+            const scrollY = window.scrollY;
+
+            mctx.fillStyle = 'rgba(45, 42, 61, 0.08)';
+            document.querySelectorAll('section').forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                const top = (rect.top + scrollY) / totalH * h;
+                const height = rect.height / totalH * h;
+                mctx.fillRect(15, top, w - 30, height);
+            });
+
+            mctx.strokeStyle = 'rgba(177, 156, 217, 0.6)';
+            mctx.lineWidth = 2;
+            mctx.strokeRect(8, scrollY / totalH * h, w - 16, viewH / totalH * h);
+
+            heatPoints.forEach(p => {
+                p.age += 0.4;
+                const alpha = Math.max(0, 0.7 - p.age / 120);
+                mctx.fillStyle = `rgba(244, 114, 182, ${alpha})`;
+                mctx.beginPath(); mctx.arc(p.x * w, p.y * h, 3, 0, Math.PI * 2); mctx.fill();
+            });
+        }
+
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            minimapCanvas.width = 100;
+            minimapCanvas.height = 180;
             dots = [];
             const cols = Math.ceil(canvas.width / dotSpacing) + 1;
             const rows = Math.ceil(canvas.height / dotSpacing) + 1;
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
                     const x = i * dotSpacing, y = j * dotSpacing;
-                    const colorIndex = (i + j) % 3;
-                    const colors = [
-                        'rgba(177, 156, 217, 0.4)',
-                        'rgba(244, 114, 182, 0.4)',
-                        'rgba(163, 213, 255, 0.4)'
-                    ];
-                    dots.push(new Dot(x, y, colors[colorIndex]));
+                    const cIdx = (i + j) % 3;
+                    const colors = ['rgba(177,156,217,0.4)','rgba(244,114,182,0.4)','rgba(163,213,255,0.4)'];
+                    dots.push(new Dot(x, y, colors[cIdx]));
                 }
             }
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             dots.forEach(dot => { dot.update(); dot.draw(); });
-
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(0,0,0,0.015)';
-            for(let x=0; x<canvas.width; x+=dotSpacing) {
-                ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
-            }
-            for(let y=0; y<canvas.height; y+=dotSpacing) {
-                ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
-            }
+            ctx.beginPath(); ctx.strokeStyle = 'rgba(0,0,0,0.015)';
+            for(let x=0; x<canvas.width; x+=dotSpacing) { ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); }
+            for(let y=0; y<canvas.height; y+=dotSpacing) { ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); }
             ctx.stroke();
 
-            // Revolving at 60% of D20 speed (-0.004 * 0.6, 0.002 * 0.6)
             morpher.rotate(-0.0024, 0.0012);
             morpher.update();
             morpher.draw();
-
             d20.rotate(-0.004, 0.002);
             d20.draw();
-
             hintArrow.update();
             hintArrow.draw();
-
+            drawMinimap();
             requestAnimationFrame(animate);
         }
-
-        // --- D20 Facts Data ---
-        const d20Facts = {
-            1: [
-                "The only number that is neither prime nor composite in modern number theory.",
-                "In computer science, 'one-hot' encoding uses a single high bit to represent state.",
-                "Benford's Law states that 1 is the leading digit in ~30% of naturally occurring datasets.",
-                "The first known mathematical constant, the ratio of a circle's circumference to its diameter, starts with 1.",
-                "In Category Theory, the 'Terminal Object' is often denoted simply as 1."
-            ],
-            2: [
-                "The only even prime number, often called 'the oddest prime'.",
-                "Silver's atomic number is 47, but its most stable isotope has a mass of 107 (prime + 2).",
-                "The 'Binary Goldbach Conjecture' states every even integer > 2 is the sum of two primes.",
-                "Humans possess two 'biological clocks' (suprachiasmatic nuclei) that regulate circadian rhythm.",
-                "In musical acoustics, the ratio 2:1 defines the perfect octave."
-            ],
-            3: [
-                "The smallest number of sides for a polygon in Euclidean geometry.",
-                "The 'Rule of Three' in C++ ensures proper resource management (destructor, copy constructor, assignment operator).",
-                "Quarks, the fundamental constituents of matter, come in three generations.",
-                "The 'Borromean Rings' consist of three topological circles which are inseparable, but remove one and all fall apart.",
-                "In game theory, a 'Three-Person Duel' (truel) has counter-intuitive optimal survival strategies."
-            ],
-            4: [
-                "The Four Color Theorem: only 4 colors are needed to color any map so no adjacent regions share a color.",
-                "Beryllium (atomic number 4) was once called 'Glucinum' due to its sweet-tasting (but toxic) salts.",
-                "The 'Four-bar Linkage' is the simplest movable closed-chain linkage in mechanical engineering.",
-                "DNA uses exactly 4 nucleobases (A, T, C, G) to encode the entire library of life.",
-                "In linear algebra, a 4x4 matrix is the standard for 3D computer graphics transformations."
-            ],
-            5: [
-                "The number of Platonic Solids: Tetrahedron, Cube, Octahedron, Dodecahedron, and Icosahedron.",
-                "Abel-Ruffini Theorem: there is no general algebraic solution for polynomial equations of degree 5 or higher.",
-                "The 'Pentatonic Scale' is found in almost every musical tradition across the globe.",
-                "Boron (atomic number 5) filaments have higher tensile strength than any other known material.",
-                "A 'Pentomino' is a polyomino composed of five non-overlapping squares."
-            ],
-            6: [
-                "The first Perfect Number: its divisors (1, 2, 3) sum to exactly 6.",
-                "The 'Six Degrees of Separation' theory suggests everything is six or fewer social connections away.",
-                "Carbon (atomic number 6) can form nearly 10 million different compounds.",
-                "A standard guitar's tuning (E2-A2-D3-G3-B3-E4) spans exactly 6 strings.",
-                "In hexagonal close-packing (HCP), each sphere is touched by exactly 6 others in its plane."
-            ],
-            7: [
-                "The Millennium Prize Problems consisted of 7 'unsolvable' math challenges (one has been solved: Poincaré Conjecture).",
-                "Millers Law: The number of objects an average human can hold in short-term memory is 7 ± 2.",
-                "The number of crystal systems in crystallography that classify all crystalline minerals.",
-                "Nitrogen (atomic number 7) makes up 78% of Earth's atmosphere by volume.",
-                "In logic, 'Septenary' systems use a base-7 numeral system (rare but used in some historical contexts)."
-            ],
-            8: [
-                "The number of bits in a 'Byte' was standardized to 8 by IBM in the 1950s.",
-                "Oxygen (atomic number 8) is the most abundant element by mass in the Earth's crust.",
-                "The 'Eight Queens Puzzle' challenges placing 8 queens on a chessboard so none threaten each other.",
-                "In music, an 'Octotonic Scale' alternates whole and half steps.",
-                "The 'Octopus' has three hearts and nine brains, but exactly 8 tentacles."
-            ],
-            9: [
-                "The highest single-digit number in decimal, also a 'Kaprekar constant' property in base-10.",
-                "Fluorine (atomic number 9) is so reactive it can burn substances generally thought to be incombustible (like glass).",
-                "In Norse cosmology, the world-tree Yggdrasil connects exactly 9 distinct realms.",
-                "The 'Casting Out Nines' technique is an old-school checksum for arithmetic operations.",
-                "A standard Sudoku grid is a 9x9 square composed of 3x3 subgrids."
-            ],
-            10: [
-                "The 'Metric System' is built entirely on powers of 10, codified during the French Revolution.",
-                "Neon (atomic number 10) is chemically inert and produces a distinct red-orange glow in vacuum tubes.",
-                "In binary, '10' represents the value two (The classic '10 types of people' joke).",
-                "The 'Decibel' scale is logarithmic; an increase of 10 dB represents a ten-fold increase in power.",
-                "A 'Tetractys' is a triangular figure of ten points, sacred to the Pythagoreans."
-            ],
-            11: [
-                "The smallest 'Repunit' prime: a prime number consisting only of the digit 1 (11).",
-                "Sodium (atomic number 11) is a soft metal that can be cut with a knife but explodes in water.",
-                "The 'Sunspot Cycle' averages approximately 11 years between solar maximums.",
-                "In string theory, M-theory proposes that spacetime has 11 dimensions.",
-                "Apollo 11 was the first mission to use a digital flight computer with a 1.024 MHz clock."
-            ],
-            12: [
-                "The 'Superior Highly Composite Number': it has more divisors than any number smaller than it.",
-                "Magnesium (atomic number 12) is the 4th most common element in the Earth as a whole.",
-                "The 'Twelve-Tone Technique' (dodecaphony) revolutionized 20th-century classical music.",
-                "In chromatic tuning, an octave is divided into 12 equal semitones.",
-                "The 'Dodecahedron' has 12 pentagonal faces and is a dual to the Icosahedron."
-            ],
-            13: [
-                "The 'Wilson Prime' search: only three are known (5, 13, 563).",
-                "Aluminum (atomic number 13) was once more valuable than gold; Napoleon III served guests on aluminum plates.",
-                "The 'Fibonacci Sequence' identifies 13 as a member (0, 1, 1, 2, 3, 5, 8, 13).",
-                "Triskaidekaphobia is the fear of the number 13.",
-                "The 'Archimedean Solids' are a set of exactly 13 convex polyhedra."
-            ],
-            14: [
-                "Silicon (atomic number 14) makes up over 25% of the Earth's crust by weight.",
-                "The 'Carbon-14' isotope is used for radiocarbon dating up to ~50,000 years.",
-                "In typography, a 'Standard Pica' is exactly 1/6 of an inch (approx. 14 points).",
-                "A sonnet is a poem of exactly 14 lines, traditionally in iambic pentameter.",
-                "14 is the atomic weight of Nitrogen-14, the most stable isotope of Nitrogen."
-            ],
-            15: [
-                "Phosphorus (atomic number 15) was discovered in 1669 by an alchemist trying to turn urine into gold.",
-                "The '15-Puzzle' (sliding tiles) was the first worldwide puzzle craze in the 1880s.",
-                "In hexadecimal, 15 is represented by the letter 'F'.",
-                "A 'Magic Square' of order 3 has a magic constant of exactly 15.",
-                "The 'Quinceañera' is a rite of passage for 15-year-old girls in many Latin cultures."
-            ],
-            16: [
-                "Sulfur (atomic number 16) is the 10th most common element in the universe by mass.",
-                "In computer architecture, a 16-bit processor can address 65,536 unique memory locations.",
-                "The 'Myers-Briggs' system categorizes humans into exactly 16 personality types.",
-                "A standard chessboard has exactly 16 pawns at the start of a game.",
-                "16 is the only number of the form x^y = y^x where x ≠ y (2^4 = 4^2)."
-            ],
-            17: [
-                "The 'Lychrel Number' search: 17 is the only prime that is the sum of 4 consecutive primes (2+3+5+7).",
-                "Chlorine (atomic number 17) was used as the first chemical weapon in WWI.",
-                "Gauss proved that a regular 17-sided polygon (Heptadecagon) can be constructed with a compass and straightedge.",
-                "The 'Least Random Number': mathematicians often choose 17 when asked to pick a 'random' number.",
-                "In many cultures, 17 is considered a spiritual number representing a transition between life stages."
-            ],
-            18: [
-                "Argon (atomic number 18) is the most abundant noble gas in Earth's atmosphere.",
-                "The 'Golomb Ruler' of length 18 is the shortest ruler that can measure all integer distances uniquely.",
-                "In many Asian cultures, 18 is associated with prosperity ('Shi-Ba' sounds like 'definitely rich').",
-                "The 'Standard Golf Course' has 18 holes, a tradition started at St Andrews in 1764.",
-                "18 is the atomic weight of water (H2O)."
-            ],
-            19: [
-                "Potassium (atomic number 19) is essential for neuron function and osmotic pressure regulation.",
-                "The 'Metonic Cycle' is a 19-year period after which the moon phases recur on the same calendar days.",
-                "In the game of 'Go', the standard board size is a 19x19 grid.",
-                "The 'Nineteenth Amendment' granted women the right to vote in the United States.",
-                "19 is the highest prime number below 20."
-            ],
-            20: [
-                "Calcium (atomic number 20) is the 5th most abundant element in the human body.",
-                "The 'Icosahedron' (our D20 die!) has exactly 20 triangular faces.",
-                "A 'Vigesimal' system uses base-20, once common in Mayan and Aztec civilizations.",
-                "The 'Twenty-Questions' game relies on binary search to identify one item out of 2^20 (1,048,576) possibilities.",
-                "Standard ASCII characters were once stored in 7 bits, but extended sets use 8 (20 is the space character in hex)."
-            ]
-        };
 
         // --- Interaction Logic ---
         let d20Cooldown = false;
@@ -931,52 +843,56 @@
 
         function showToast(content) {
             const toast = document.getElementById('toast');
-            
-            // Clear existing timeout if any
-            if (toastTimeout) {
-                clearTimeout(toastTimeout);
-            }
-
-            // Immediately reset visibility for a "new" feel
+            if (toastTimeout) clearTimeout(toastTimeout);
             toast.classList.remove('show');
-            
-            // Small delay to allow the removal to trigger (DOM update)
             setTimeout(() => {
                 toast.innerHTML = content;
                 toast.classList.add('show');
-                
-                // Set timeout for removal
                 toastTimeout = setTimeout(() => {
                     toast.classList.remove('show');
                     toastTimeout = null;
-                }, 6000); // 6 seconds for reading obscure facts
+                }, 6000);
             }, 50);
         }
 
         document.getElementById('die-zone').addEventListener('click', () => {
             if (d20Cooldown) return;
-            
             d20Cooldown = true;
             const roll = Math.floor(Math.random() * 20) + 1;
             const facts = d20Facts[roll];
             const fact = facts[Math.floor(Math.random() * facts.length)];
-            
             showToast(`<strong>Reality Check: ${roll}</strong> ${fact}`);
-            
-            // 1.5s Cooldown to match animation feel
-            setTimeout(() => {
-                d20Cooldown = false;
-            }, 1200);
+            setTimeout(() => { d20Cooldown = false; }, 1200);
         });
 
-        // --- Scroll Animations ---
+        // --- D20 Facts Data ---
+        const d20Facts = {
+            1: ["The only number that is neither prime nor composite in modern number theory.", "In computer science, 'one-hot' encoding uses a single high bit to represent state.", "Benford's Law states that 1 is the leading digit in ~30% of naturally occurring datasets.", "The first known mathematical constant, the ratio of a circle's circumference to its diameter, starts with 1.", "In Category Theory, the 'Terminal Object' is often denoted simply as 1."],
+            2: ["The only even prime number, often called 'the oddest prime'.", "Silver's atomic number is 47, but its most stable isotope has a mass of 107 (prime + 2).", "The 'Binary Goldbach Conjecture' states every even integer > 2 is the sum of two primes.", "Humans possess two 'biological clocks' (suprachiasmatic nuclei) that regulate circadian rhythm.", "In musical acoustics, the ratio 2:1 defines the perfect octave."],
+            3: ["The smallest number of sides for a polygon in Euclidean geometry.", "The 'Rule of Three' in C++ ensures proper resource management (destructor, copy constructor, assignment operator).", "Quarks, the fundamental constituents of matter, come in three generations.", "The 'Borromean Rings' consist of three topological circles which are inseparable, but remove one and all fall apart.", "In game theory, a 'Three-Person Duel' (truel) has counter-intuitive optimal survival strategies."],
+            4: ["The Four Color Theorem: only 4 colors are needed to color any map so no adjacent regions share a color.", "Beryllium (atomic number 4) was once called 'Glucinum' due to its sweet-tasting (but toxic) salts.", "The 'Four-bar Linkage' is the simplest movable closed-chain linkage in mechanical engineering.", "DNA uses exactly 4 nucleobases (A, T, C, G) to encode the entire library of life.", "In linear algebra, a 4x4 matrix is the standard for 3D computer graphics transformations."],
+            5: ["The number of Platonic Solids: Tetrahedron, Cube, Octahedron, Dodecahedron, and Icosahedron.", "Abel-Ruffini Theorem: there is no general algebraic solution for polynomial equations of degree 5 or higher.", "The 'Pentatonic Scale' is found in almost every musical tradition across the globe.", "Boron (atomic number 5) filaments have higher tensile strength than any other known material.", "A 'Pentomino' is a polyomino composed of five non-overlapping squares."],
+            6: ["The first Perfect Number: its divisors (1, 2, 3) sum to exactly 6.", "The 'Six Degrees of Separation' theory suggests everything is six or fewer social connections away.", "Carbon (atomic number 6) can form nearly 10 million different compounds.", "A standard guitar's tuning (E2-A2-D3-G3-B3-E4) spans exactly 6 strings.", "In hexagonal close-packing (HCP), each sphere is touched by exactly 6 others in its plane."],
+            7: ["The Millennium Prize Problems consisted of 7 'unsolvable' math challenges (one has been solved: Poincaré Conjecture).", "Millers Law: The number of objects an average human can hold in short-term memory is 7 ± 2.", "The number of crystal systems in crystallography that classify all crystalline minerals.", "Nitrogen (atomic number 7) makes up 78% of Earth's atmosphere by volume.", "In logic, 'Septenary' systems use a base-7 numeral system (rare but used in some historical contexts)."],
+            8: ["The number of bits in a 'Byte' was standardized to 8 by IBM in the 1950s.", "Oxygen (atomic number 8) is the most abundant element by mass in the Earth's crust.", "The 'Eight Queens Puzzle' challenges placing 8 queens on a chessboard so none threaten each other.", "In music, an 'Octotonic Scale' alternates whole and half steps.", "The 'Octopus' has three hearts and nine brains, but exactly 8 tentacles."],
+            9: ["The highest single-digit number in decimal, also a 'Kaprekar constant' property in base-10.", "Fluorine (atomic number 9) is so reactive it can burn substances generally thought to be incombustible (like glass).", "In Norse cosmology, the world-tree Yggdrasil connects exactly 9 distinct realms.", "The 'Casting Out Nines' technique is an old-school checksum for arithmetic operations.", "A standard Sudoku grid is a 9x9 square composed of 3x3 subgrids."],
+            10: ["The 'Metric System' is built entirely on powers of 10, codified during the French Revolution.", "Neon (atomic number 10) is chemically inert and produces a distinct red-orange glow in vacuum tubes.", "In binary, '10' represents the value two (The classic '10 types of people' joke).", "The 'Decibel' scale is logarithmic; an increase of 10 dB represents a ten-fold increase in power.", "A 'Tetractys' is a triangular figure of ten points, sacred to the Pythagoreans."],
+            11: ["The smallest 'Repunit' prime: a prime number consisting only of the digit 1 (11).", "Sodium (atomic number 11) is a soft metal that can be cut with a knife but explodes in water.", "The 'Sunspot Cycle' averages approximately 11 years between solar maximums.", "In string theory, M-theory proposes that spacetime has 11 dimensions.", "Apollo 11 was the first mission to use a digital flight computer with a 1.024 MHz clock."],
+            12: ["The 'Superior Highly Composite Number': it has more divisors than any number smaller than it.", "Magnesium (atomic number 12) is the 4th most common element in the Earth as a whole.", "The 'Twelve-Tone Technique' (dodecaphony) revolutionized 20th-century classical music.", "In chromatic tuning, an octave is divided into 12 equal semitones.", "The 'Dodecahedron' has 12 pentagonal faces and is a dual to the Icosahedron."],
+            13: ["The 'Wilson Prime' search: only three are known (5, 13, 563).", "Aluminum (atomic number 13) was once more valuable than gold; Napoleon III served guests on aluminum plates.", "The 'Fibonacci Sequence' identifies 13 as a member (0, 1, 1, 2, 3, 5, 8, 13).", "Triskaidekaphobia is the fear of the number 13.", "The 'Archimedean Solids' are a set of exactly 13 convex polyhedra."],
+            14: ["Silicon (atomic number 14) makes up over 25% of the Earth's crust by weight.", "The 'Carbon-14' isotope is used for radiocarbon dating up to ~50,000 years.", "In typography, a 'Standard Pica' is exactly 1/6 of an inch (approx. 14 points).", "A sonnet is a poem of exactly 14 lines, traditionally in iambic pentameter.", "14 is the atomic weight of Nitrogen-14, the most stable isotope of Nitrogen."],
+            15: ["Phosphorus (atomic number 15) was discovered in 1669 by an alchemist trying to turn urine into gold.", "The '15-Puzzle' (sliding tiles) was the first worldwide puzzle craze in the 1880s.", "In hexadecimal, 15 is represented by the letter 'F'.", "A 'Magic Square' of order 3 has a magic constant of exactly 15.", "The 'Quinceañera' is a rite of passage for 15-year-old girls in many Latin cultures."],
+            16: ["Sulfur (atomic number 16) is the 10th most common element in the universe by mass.", "In computer architecture, a 16-bit processor can address 65,536 unique memory locations.", "The 'Myers-Briggs' system categorizes humans into exactly 16 personality types.", "A standard chessboard has exactly 16 pawns at the start of a game.", "16 is the only number of the form x^y = y^x where x ≠ y (2^4 = 4^2)."],
+            17: ["The 'Lychrel Number' search: 17 is the only prime that is the sum of 4 consecutive primes (2+3+5+7).", "Chlorine (atomic number 17) was used as the first chemical weapon in WWI.", "Gauss proved that a regular 17-sided polygon (Heptadecagon) can be constructed with a compass and straightedge.", "The 'Least Random Number': mathematicians often choose 17 when asked to pick a 'random' number.", "In many cultures, 17 is considered a spiritual number representing a transition between life stages."],
+            18: ["Argon (atomic number 18) is the most abundant noble gas in Earth's atmosphere.", "The 'Golomb Ruler' of length 18 is the shortest ruler that can measure all integer distances uniquely.", "In many Asian cultures, 18 is associated with prosperity ('Shi-Ba' sounds like 'definitely rich').", "The 'Standard Golf Course' has 18 holes, a tradition started at St Andrews in 1764.", "18 is the atomic weight of water (H2O)."],
+            19: ["Potassium (atomic number 19) is essential for neuron function and osmotic pressure regulation.", "The 'Metonic Cycle' is a 19-year period after which the moon phases recur on the same calendar days.", "In the game of 'Go', the standard board size is a 19x19 grid.", "The 'Nineteenth Amendment' granted women the right to vote in the United States.", "19 is the highest prime number below 20."],
+            20: ["Calcium (atomic number 20) is the 5th most abundant element in the human body.", "The 'Icosahedron' (our D20 die!) has exactly 20 triangular faces.", "A 'Vigesimal' system uses base-20, once common in Mayan and Aztec civilizations.", "The 'Twenty-Questions' game relies on binary search to identify one item out of 2^20 (1,048,576) possibilities.", "Standard ASCII characters were once stored in 7 bits, but extended sets use 8 (20 is the space character in hex)."]
+        };
+
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, observerOptions);
-
         document.querySelectorAll('section').forEach(section => observer.observe(section));
 
         window.addEventListener('resize', resize);
