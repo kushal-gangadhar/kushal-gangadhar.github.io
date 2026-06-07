@@ -835,8 +835,6 @@
             morpher.draw();
             d20.rotate(-0.004, 0.002);
             d20.draw();
-            hintArrow.update();
-            hintArrow.draw();
             requestAnimationFrame(animate);
         }
 
@@ -876,30 +874,6 @@
             setTimeout(() => { d20Cooldown = false; }, 1200);
         });
 
-        // --- D20 Facts Data ---
-        const d20Facts = {
-            1: ["In von Neumann's construction of ordinals, 1 is defined as the set containing only the empty set.", "The only number that is its own factorial, square, and cube.", "The multiplicative identity in every ring and field.", "The only number that is neither prime nor composite in modern number theory.", "In Category Theory, the 'Terminal Object' is often denoted simply as 1."],
-            2: ["The only number n such that the zeta function ζ(n) has a known simple closed form in terms of π (π²/6).", "The only even prime number, often called 'the oddest prime'.", "The dimension of the complex plane as a real vector space.", "Humans possess two 'biological clocks' (suprachiasmatic nuclei) that regulate circadian rhythm.", "In musical acoustics, the ratio 2:1 defines the perfect octave."],
-            3: ["The number of generations of fermions (quarks and leptons) in the Standard Model of particle physics.", "The number of dimensions in which stable planetary orbits are possible according to General Relativity.", "The smallest number of sides for a polygon in Euclidean geometry.", "Quarks come in three distinct 'colors' (red, green, blue).", "In game theory, a 'Three-Person Duel' (truel) has counter-intuitive optimal survival strategies."],
-            4: ["The only dimension n where 'exotic' Rⁿ exists—manifolds homeomorphic but not diffeomorphic to R⁴.", "The Four Color Theorem was the first major theorem to be proved using a computer.", "DNA uses exactly 4 nucleobases (A, T, C, G) to encode the entire library of life.", "The 'Four-bar Linkage' is the simplest movable closed-chain linkage in mechanical engineering.", "In linear algebra, a 4x4 matrix is the standard for 3D computer graphics transformations."],
-            5: ["The number of exceptional Lie groups (G₂, F₄, E₆, E₇, E₈) in the classification of simple Lie algebras.", "Abel-Ruffini Theorem: there is no general algebraic solution for polynomial equations of degree 5 or higher.", "The number of Platonic Solids: Tetrahedron, Cube, Octahedron, Dodecahedron, and Icosahedron.", "The 'Pentatonic Scale' is found in almost every musical tradition across the globe.", "A 'Pentomino' is a polyomino composed of five non-overlapping squares."],
-            6: ["The only finite symmetric group Sₙ that has an outer automorphism.", "The smallest Perfect Number: its divisors (1, 2, 3) sum to exactly 6.", "Carbon (atomic number 6) can form nearly 10 million different compounds.", "The only number that is both the sum and product of the same three consecutive integers (1, 2, 3).", "In hexagonal close-packing (HCP), each sphere is touched by exactly 6 others in its plane."],
-            7: ["The dimension of the only spheres (besides S¹ and S³) that admit a cross product—S⁷.", "The regular 7-gon (heptagon) is the smallest regular polygon not constructible by compass and straightedge.", "The Millennium Prize Problems consisted of 7 'unsolvable' math challenges.", "Nitrogen (atomic number 7) makes up 78% of Earth's atmosphere by volume.", "Millers Law: The number of objects an average human can hold in short-term memory is 7 ± 2."],
-            8: ["The dimension of the octonions, the largest normed division algebra over the real numbers.", "The largest Fibonacci number that is also a perfect cube (2³).", "The number of bits in a 'Byte' was standardized to 8 by IBM in the 1950s.", "Oxygen (atomic number 8) is the most abundant element by mass in the Earth's crust.", "The 'Eight Queens Puzzle' challenges placing 8 queens on a chessboard so none threaten each other."],
-            9: ["The maximum number of cubes needed to sum to any positive integer (Waring's Problem for cubes).", "The highest single-digit number in decimal, also a 'Kaprekar constant' property in base-10.", "Fluorine (atomic number 9) is so reactive it can burn glass and water.", "In Norse cosmology, the world-tree Yggdrasil connects exactly 9 distinct realms.", "A standard Sudoku grid is a 9x9 square composed of 3x3 subgrids."],
-            10: ["The number of solutions to the n-queens problem for n=5.", "Neon (atomic number 10) is chemically inert and produces a distinct red-orange glow.", "In binary, '10' represents the value two (The classic '10 types of people' joke).", "The 'Decibel' scale is logarithmic; an increase of 10 dB represents a ten-fold increase in power.", "A 'Tetractys' is a triangular figure of ten points, sacred to the Pythagoreans."],
-            11: ["The number of dimensions in M-theory, the unifying framework for all superstring theories.", "The largest number that cannot be written as the sum of two composite numbers.", "The smallest 'Repunit' prime: a prime number consisting only of the digit 1 (11).", "Sodium (atomic number 11) is a soft metal that explodes in water.", "Apollo 11 was the first mission to use a digital flight computer with a 1.024 MHz clock."],
-            12: ["The 'Kissing Number' in 3D: the max number of non-overlapping unit spheres that can touch a central unit sphere.", "The 'Superior Highly Composite Number': it has more divisors than any number smaller than it.", "The number of edges on a cube and on an octahedron.", "The 'Twelve-Tone Technique' (dodecaphony) revolutionized 20th-century classical music.", "In chromatic tuning, an octave is divided into 12 equal semitones."],
-            13: ["The smallest prime p such that 2ᵖ-1 is not a Mersenne prime (2¹³-1 is prime, but the pattern breaks later).", "The number of Archimedean solids—semi-regular convex polyhedra.", "The 'Wilson Prime' search: only three are known (5, 13, 563).", "Aluminum (atomic number 13) was once more valuable than gold.", "Triskaidekaphobia is the fear of the number 13."],
-            14: ["The number of Bravais lattices that describe all possible crystal structures in three dimensions.", "Silicon (atomic number 14) makes up over 25% of the Earth's crust by weight.", "The 'Carbon-14' isotope is used for radiocarbon dating up to ~50,000 years.", "A sonnet is a poem of exactly 14 lines, traditionally in iambic pentameter.", "14 is the atomic weight of Nitrogen-14, the most stable isotope of Nitrogen."],
-            15: ["The magic constant of the smallest possible magic square (3x3).", "Phosphorus (atomic number 15) was discovered by an alchemist trying to turn urine into gold.", "In hexadecimal, 15 is represented by the letter 'F'.", "The '15-Puzzle' (sliding tiles) was the first worldwide puzzle craze in the 1880s.", "A 'Magic Square' of order 3 has a magic constant of exactly 15."],
-            16: ["The number of cells in a Tesseract (the four-dimensional analog of a cube).", "The only number of the form xʸ = yˣ where x ≠ y (2⁴ = 4²).", "Sulfur (atomic number 16) is the 10th most common element in the universe by mass.", "In computer architecture, a 16-bit processor can address 65,536 unique memory locations.", "The 'Myers-Briggs' system categorizes humans into exactly 16 personality types."],
-            17: ["The number of plane symmetry groups, also known as 'Wallpaper Groups'.", "Gauss proved that a regular 17-sided polygon (Heptadecagon) can be constructed with a compass and straightedge.", "The 'Lychrel Number' search: 17 is the only prime that is the sum of 4 consecutive primes.", "Chlorine (atomic number 17) was used as the first chemical weapon in WWI.", "The 'Least Random Number': mathematicians often choose 17 when asked to pick a 'random' number."],
-            18: ["The only number that is twice the sum of its digits (excluding zero).", "Argon (atomic number 18) is the most abundant noble gas in Earth's atmosphere.", "The 'Golomb Ruler' of length 18 is the shortest ruler that can measure all integer distances uniquely.", "The 'Standard Golf Course' has 18 holes, a tradition started in 1764.", "18 is the atomic weight of water (H₂O)."],
-            19: ["The maximum number of fourth powers needed to represent any integer (Waring's Problem for n=4).", "The 'Metonic Cycle' is a 19-year period after which the moon phases recur on the same calendar days.", "Potassium (atomic number 19) is essential for neuron function and regulation.", "In the game of 'Go', the standard board size is a 19x19 grid.", "19 is the highest prime number below 20."],
-            20: ["'God's Number' for the Rubik's Cube: the maximum number of moves needed to solve any position.", "The number of faces on an Icosahedron (our D20 die!).", "Calcium (atomic number 20) is the 5th most abundant element in the human body.", "A 'Vigesimal' system uses base-20, once common in Mayan and Aztec civilizations.", "The 'Twenty-Questions' game relies on binary search to identify one item out of 2²⁰ possibilities."]
-        };
-
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
@@ -910,5 +884,8 @@
         resize();
         animate();
     </script>
+</body>
+</html>
+ipt>
 </body>
 </html>
