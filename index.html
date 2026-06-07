@@ -286,30 +286,34 @@
             position: fixed;
             bottom: 50px;
             left: 50%;
-            transform: translateX(-50%) translateY(120px);
+            transform: translateX(-50%) translateY(150px);
             background: var(--text-primary);
             color: white;
             padding: 1.2rem 2.5rem;
             border-radius: 20px;
-            font-weight: 500;
+            font-weight: 400;
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
             z-index: 1000;
-            max-width: 90vw;
+            max-width: 80vw;
             text-align: center;
             line-height: 1.5;
+            opacity: 0;
+            pointer-events: none;
         }
 
         #toast strong {
             display: block;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 0.4rem;
             color: var(--accent-lime);
             font-weight: 800;
+            letter-spacing: 0.05em;
         }
 
         #toast.show {
             transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
 
         /* Footer */
@@ -626,49 +630,198 @@
 
         // --- D20 Facts Data ---
         const d20Facts = {
-            1: ["In binary, this is the beginning of everything.", "A critical miss, but even the best algorithms have edge cases.", "The atomic number of Hydrogen, the most abundant element.", "One is the only number that is neither prime nor composite.", "The loneliest number, according to Three Dog Night."],
-            2: ["The only even prime number.", "The number of bits in a single boolean choice.", "Binary code is built entirely on the dance between 0 and 2.", "Humans have 2 hemispheres in their brain, constantly syncing.", "The smallest number of people required for a conversation."],
-            3: ["The first odd prime number.", "Three points are the minimum needed to define a plane in 3D space.", "In photography, the 'Rule of Thirds' creates perfect balance.", "The number of spatial dimensions we perceive every day.", "A triangle is the most stable geometric shape."],
-            4: ["The number of cardinal directions: North, South, East, West.", "Four is the only number in English that has the same number of letters as its value.", "The number of nucleobases in DNA: A, C, G, and T.", "A square's internal angles always sum to 360 degrees.", "The number of seasons in a typical tropical year."],
-            5: ["The number of Platonic solids that exist in geometry.", "Humans typically have five senses to navigate the world.", "A pentagram was once a symbol of health and mystical balance.", "The number of fingers on a human hand.", "In music, a perfect fifth is the most consonant interval after the octave."],
-            6: ["The first 'perfect number'—it equals the sum of its divisors (1, 2, 3).", "In a honeycomb, bees use hexagonal cells for maximum efficiency.", "Carbon, the basis of all known life, has the atomic number 6.", "A standard guitar has 6 strings.", "The number of faces on a standard cube."],
-            7: ["The number of colors in a rainbow (traditionally).", "A week has seven days, a cycle used for millennia.", "There are seven logic gates used in digital circuitry.", "The number of rows in the periodic table of elements.", "In many cultures, 7 is considered the luckiest number."],
-            8: ["The number of bits in a byte—the fundamental unit of data.", "In music, an octave consists of eight notes.", "The atomic number of Oxygen, which keeps us going.", "A byte can represent 256 unique values (2 to the power of 8).", "The number of planets in our solar system."],
-            9: ["The highest single-digit number in the decimal system.", "In Norse mythology, there are nine worlds connected by Yggdrasil.", "The number of innings in a standard baseball game.", "A human pregnancy typically lasts nine months.", "The atomic number of Fluorine, the most reactive element."],
-            10: ["The base of our decimal system, thanks to our ten fingers.", "In computer science, 10 is the representation of 2 in binary.", "The number of years in a decade.", "Neon, the gas used for bright signs, has the atomic number 10.", "The number of commandments in various moral codes."],
-            11: ["The first 'repdigit'—a number with identical digits.", "Sodium (Na) has the atomic number 11.", "The number of players on a standard football (soccer) team.", "Apollo 11 was the first mission to land humans on the Moon.", "In binary, 11 represents the number 3."],
-            12: ["A 'dozen'—one of the most common units of grouping.", "The number of months in a year.", "The number of zodiac signs in both Western and Chinese astrology.", "There are 12 inches in a foot.", "The atomic number of Magnesium."],
-            13: ["A prime number often associated with superstition and 'Baker's Dozens'.", "The number of stripes on the United States flag.", "Aluminum has the atomic number 13.", "The 13th element in the Fibonacci sequence is 233.", "In lunar calendars, some years have 13 months."],
-            14: ["The atomic number of Silicon, the foundation of modern computing.", "The number of lines in a traditional sonnet.", "Two weeks is exactly fourteen days (a fortnight).", "Nitrogen has a standard atomic weight of approximately 14.", "In binary, 1110 represents 14."],
-            15: ["The atomic number of Phosphorus.", "The number of players on a rugby union team.", "A crystal anniversary marks 15 years.", "In many Latin cultures, the 'Quinceañera' celebrates the 15th birthday.", "The sum of any row, column, or diagonal in a 3x3 magic square."],
-            16: ["The base of the hexadecimal system (0-F).", "The number of bits in a 'half-word' in many architectures.", "Sulfur has the atomic number 16.", "A standard chessboard has 16 pawns.", "The number of Myers-Briggs personality types."],
-            17: ["A prime number known as 'The Least Random Number' among mathematicians.", "Chlorine has the atomic number 17.", "The number of syllables in a traditional Haiku (5-7-5).", "In many cultures, 17 is considered a very spiritual number.", "The 17th Fibonacci number is 1597."],
-            18: ["The atomic number of Argon, a noble gas.", "The age of legal adulthood in many countries.", "The number of holes on a standard golf course.", "In many cultures, 18 is a symbol of 'life' or 'good luck'.", "A standard deck of cards has 18 red cards (if you ignore face cards)."],
-            19: ["The last teen number and a strong prime.", "Potassium has the atomic number 19.", "The number of years in a Metonic cycle (moon phases).", "In binary, 10011 represents 19.", "The Sun card in Tarot is often the 19th card."],
-            20: ["A 'score'—as in 'four score and seven years ago'.", "Calcium has the atomic number 20.", "The number of faces on an Icosahedron (a D20!).", "Humans have 20 'baby' teeth before they fall out.", "In binary, 10100 represents 20."]
+            1: [
+                "The only number that is neither prime nor composite in modern number theory.",
+                "In computer science, 'one-hot' encoding uses a single high bit to represent state.",
+                "Benford's Law states that 1 is the leading digit in ~30% of naturally occurring datasets.",
+                "The first known mathematical constant, the ratio of a circle's circumference to its diameter, starts with 1.",
+                "In Category Theory, the 'Terminal Object' is often denoted simply as 1."
+            ],
+            2: [
+                "The only even prime number, often called 'the oddest prime'.",
+                "Silver's atomic number is 47, but its most stable isotope has a mass of 107 (prime + 2).",
+                "The 'Binary Goldbach Conjecture' states every even integer > 2 is the sum of two primes.",
+                "Humans possess two 'biological clocks' (suprachiasmatic nuclei) that regulate circadian rhythm.",
+                "In musical acoustics, the ratio 2:1 defines the perfect octave."
+            ],
+            3: [
+                "The smallest number of sides for a polygon in Euclidean geometry.",
+                "The 'Rule of Three' in C++ ensures proper resource management (destructor, copy constructor, assignment operator).",
+                "Quarks, the fundamental constituents of matter, come in three generations.",
+                "The 'Borromean Rings' consist of three topological circles which are inseparable, but remove one and all fall apart.",
+                "In game theory, a 'Three-Person Duel' (truel) has counter-intuitive optimal survival strategies."
+            ],
+            4: [
+                "The Four Color Theorem: only 4 colors are needed to color any map so no adjacent regions share a color.",
+                "Beryllium (atomic number 4) was once called 'Glucinum' due to its sweet-tasting (but toxic) salts.",
+                "The 'Four-bar Linkage' is the simplest movable closed-chain linkage in mechanical engineering.",
+                "DNA uses exactly 4 nucleobases (A, T, C, G) to encode the entire library of life.",
+                "In linear algebra, a 4x4 matrix is the standard for 3D computer graphics transformations."
+            ],
+            5: [
+                "The number of Platonic Solids: Tetrahedron, Cube, Octahedron, Dodecahedron, and Icosahedron.",
+                "Abel-Ruffini Theorem: there is no general algebraic solution for polynomial equations of degree 5 or higher.",
+                "The 'Pentatonic Scale' is found in almost every musical tradition across the globe.",
+                "Boron (atomic number 5) filaments have higher tensile strength than any other known material.",
+                "A 'Pentomino' is a polyomino composed of five non-overlapping squares."
+            ],
+            6: [
+                "The first Perfect Number: its divisors (1, 2, 3) sum to exactly 6.",
+                "The 'Six Degrees of Separation' theory suggests everything is six or fewer social connections away.",
+                "Carbon (atomic number 6) can form nearly 10 million different compounds.",
+                "A standard guitar's tuning (E2-A2-D3-G3-B3-E4) spans exactly 6 strings.",
+                "In hexagonal close-packing (HCP), each sphere is touched by exactly 6 others in its plane."
+            ],
+            7: [
+                "The Millennium Prize Problems consisted of 7 'unsolvable' math challenges (one has been solved: Poincaré Conjecture).",
+                "Millers Law: The number of objects an average human can hold in short-term memory is 7 ± 2.",
+                "The number of crystal systems in crystallography that classify all crystalline minerals.",
+                "Nitrogen (atomic number 7) makes up 78% of Earth's atmosphere by volume.",
+                "In logic, 'Septenary' systems use a base-7 numeral system (rare but used in some historical contexts)."
+            ],
+            8: [
+                "The number of bits in a 'Byte' was standardized to 8 by IBM in the 1950s.",
+                "Oxygen (atomic number 8) is the most abundant element by mass in the Earth's crust.",
+                "The 'Eight Queens Puzzle' challenges placing 8 queens on a chessboard so none threaten each other.",
+                "In music, an 'Octotonic Scale' alternates whole and half steps.",
+                "The 'Octopus' has three hearts and nine brains, but exactly 8 tentacles."
+            ],
+            9: [
+                "The highest single-digit number in decimal, also a 'Kaprekar constant' property in base-10.",
+                "Fluorine (atomic number 9) is so reactive it can burn substances generally thought to be incombustible (like glass).",
+                "In Norse cosmology, the world-tree Yggdrasil connects exactly 9 distinct realms.",
+                "The 'Casting Out Nines' technique is an old-school checksum for arithmetic operations.",
+                "A standard Sudoku grid is a 9x9 square composed of 3x3 subgrids."
+            ],
+            10: [
+                "The 'Metric System' is built entirely on powers of 10, codified during the French Revolution.",
+                "Neon (atomic number 10) is chemically inert and produces a distinct red-orange glow in vacuum tubes.",
+                "In binary, '10' represents the value two (The classic '10 types of people' joke).",
+                "The 'Decibel' scale is logarithmic; an increase of 10 dB represents a ten-fold increase in power.",
+                "A 'Tetractys' is a triangular figure of ten points, sacred to the Pythagoreans."
+            ],
+            11: [
+                "The smallest 'Repunit' prime: a prime number consisting only of the digit 1 (11).",
+                "Sodium (atomic number 11) is a soft metal that can be cut with a knife but explodes in water.",
+                "The 'Sunspot Cycle' averages approximately 11 years between solar maximums.",
+                "In string theory, M-theory proposes that spacetime has 11 dimensions.",
+                "Apollo 11 was the first mission to use a digital flight computer with a 1.024 MHz clock."
+            ],
+            12: [
+                "The 'Superior Highly Composite Number': it has more divisors than any number smaller than it.",
+                "Magnesium (atomic number 12) is the 4th most common element in the Earth as a whole.",
+                "The 'Twelve-Tone Technique' (dodecaphony) revolutionized 20th-century classical music.",
+                "In chromatic tuning, an octave is divided into 12 equal semitones.",
+                "The 'Dodecahedron' has 12 pentagonal faces and is a dual to the Icosahedron."
+            ],
+            13: [
+                "The 'Wilson Prime' search: only three are known (5, 13, 563).",
+                "Aluminum (atomic number 13) was once more valuable than gold; Napoleon III served guests on aluminum plates.",
+                "The 'Fibonacci Sequence' identifies 13 as a member (0, 1, 1, 2, 3, 5, 8, 13).",
+                "Triskaidekaphobia is the fear of the number 13.",
+                "The 'Archimedean Solids' are a set of exactly 13 convex polyhedra."
+            ],
+            14: [
+                "Silicon (atomic number 14) makes up over 25% of the Earth's crust by weight.",
+                "The 'Carbon-14' isotope is used for radiocarbon dating up to ~50,000 years.",
+                "In typography, a 'Standard Pica' is exactly 1/6 of an inch (approx. 14 points).",
+                "A sonnet is a poem of exactly 14 lines, traditionally in iambic pentameter.",
+                "14 is the atomic weight of Nitrogen-14, the most stable isotope of Nitrogen."
+            ],
+            15: [
+                "Phosphorus (atomic number 15) was discovered in 1669 by an alchemist trying to turn urine into gold.",
+                "The '15-Puzzle' (sliding tiles) was the first worldwide puzzle craze in the 1880s.",
+                "In hexadecimal, 15 is represented by the letter 'F'.",
+                "A 'Magic Square' of order 3 has a magic constant of exactly 15.",
+                "The 'Quinceañera' is a rite of passage for 15-year-old girls in many Latin cultures."
+            ],
+            16: [
+                "Sulfur (atomic number 16) is the 10th most common element in the universe by mass.",
+                "In computer architecture, a 16-bit processor can address 65,536 unique memory locations.",
+                "The 'Myers-Briggs' system categorizes humans into exactly 16 personality types.",
+                "A standard chessboard has exactly 16 pawns at the start of a game.",
+                "16 is the only number of the form x^y = y^x where x ≠ y (2^4 = 4^2)."
+            ],
+            17: [
+                "The 'Lychrel Number' search: 17 is the only prime that is the sum of 4 consecutive primes (2+3+5+7).",
+                "Chlorine (atomic number 17) was used as the first chemical weapon in WWI.",
+                "Gauss proved that a regular 17-sided polygon (Heptadecagon) can be constructed with a compass and straightedge.",
+                "The 'Least Random Number': mathematicians often choose 17 when asked to pick a 'random' number.",
+                "In many cultures, 17 is considered a spiritual number representing a transition between life stages."
+            ],
+            18: [
+                "Argon (atomic number 18) is the most abundant noble gas in Earth's atmosphere.",
+                "The 'Golomb Ruler' of length 18 is the shortest ruler that can measure all integer distances uniquely.",
+                "In many Asian cultures, 18 is associated with prosperity ('Shi-Ba' sounds like 'definitely rich').",
+                "The 'Standard Golf Course' has 18 holes, a tradition started at St Andrews in 1764.",
+                "18 is the atomic weight of water (H2O)."
+            ],
+            19: [
+                "Potassium (atomic number 19) is essential for neuron function and osmotic pressure regulation.",
+                "The 'Metonic Cycle' is a 19-year period after which the moon phases recur on the same calendar days.",
+                "In the game of 'Go', the standard board size is a 19x19 grid.",
+                "The 'Nineteenth Amendment' granted women the right to vote in the United States.",
+                "19 is the highest prime number below 20."
+            ],
+            20: [
+                "Calcium (atomic number 20) is the 5th most abundant element in the human body.",
+                "The 'Icosahedron' (our D20 die!) has exactly 20 triangular faces.",
+                "A 'Vigesimal' system uses base-20, once common in Mayan and Aztec civilizations.",
+                "The 'Twenty-Questions' game relies on binary search to identify one item out of 2^20 (1,048,576) possibilities.",
+                "Standard ASCII characters were once stored in 7 bits, but extended sets use 8 (20 is the space character in hex)."
+            ]
         };
 
         // --- Interaction Logic ---
+        let d20Cooldown = false;
+        let toastTimeout = null;
+
         function copyEmail(e) {
             e.preventDefault();
             const email = "kushalgangadhariah@gmail.com";
             navigator.clipboard.writeText(email).then(() => {
-                showToast("<strong>Success!</strong> Email copied to clipboard.");
+                showToast("<strong>Status: Connected</strong> My email address is now on your clipboard.");
             });
         }
 
         function showToast(content) {
             const toast = document.getElementById('toast');
-            toast.innerHTML = content;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 5000);
+            
+            // Clear existing timeout if any
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+
+            // Immediately reset visibility for a "new" feel
+            toast.classList.remove('show');
+            
+            // Small delay to allow the removal to trigger (DOM update)
+            setTimeout(() => {
+                toast.innerHTML = content;
+                toast.classList.add('show');
+                
+                // Set timeout for removal
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('show');
+                    toastTimeout = null;
+                }, 6000); // 6 seconds for reading obscure facts
+            }, 50);
         }
 
         document.getElementById('die-zone').addEventListener('click', () => {
+            if (d20Cooldown) return;
+            
+            d20Cooldown = true;
             const roll = Math.floor(Math.random() * 20) + 1;
             const facts = d20Facts[roll];
             const fact = facts[Math.floor(Math.random() * facts.length)];
-            showToast(`<strong>Critical Roll: ${roll}</strong> ${fact}`);
+            
+            showToast(`<strong>Reality Check: ${roll}</strong> ${fact}`);
+            
+            // 1.5s Cooldown to match animation feel
+            setTimeout(() => {
+                d20Cooldown = false;
+            }, 1200);
         });
 
         // --- Scroll Animations ---
