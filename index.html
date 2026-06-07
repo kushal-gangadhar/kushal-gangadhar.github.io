@@ -542,19 +542,16 @@
                 const x = this.startX + (this.targetX - this.startX) * this.progress;
                 const y = this.startY + (this.targetY - this.startY) * this.progress;
                 
-                // Draw trailing edge (Glow effect)
+                // Draw current edge segment (Faint & Subtle)
                 ctx.beginPath();
                 ctx.moveTo(this.startX, this.startY);
                 ctx.lineTo(x, y);
-                ctx.strokeStyle = `rgba(163, 213, 255, ${this.alpha * 1.2})`;
-                ctx.lineWidth = 2.5;
+                
+                // Create a very subtle gradient-like stroke
+                ctx.strokeStyle = `rgba(163, 213, 255, ${this.alpha * 0.4})`;
+                ctx.lineWidth = 1.8;
+                ctx.lineCap = 'round';
                 ctx.stroke();
-
-                // Draw the head dot
-                ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                ctx.shadowBlur = 12; ctx.shadowColor = 'rgba(163, 213, 255, 0.9)';
-                ctx.fill(); ctx.shadowBlur = 0;
             }
         }
 
