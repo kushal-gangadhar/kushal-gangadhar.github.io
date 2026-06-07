@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kushal's Space</title>
+    <title>Kushal Gangadhar | Student & Maker</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f9f5ff;
-            --card-bg: #ffffff;
-            --text-primary: #483d8b;
-            --text-secondary: #7d669e;
-            --accent-color: #b19cd9;
-            --accent-lime: #bef264; /* Vibrant Lime Green */
-            --accent-pink: #f472b6; /* Matching Pink */
-            --border-color: #e0d1f0;
-            --transition: all 0.2s ease-in-out;
+            /* Clean Minimalist Palette */
+            --bg-color: #fcfcfd;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --accent-purple: #b19cd9;
+            --accent-lime: #bef264;
+            --accent-pink: #f472b6;
+            
+            /* Glassmorphism & Depth */
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            
+            --transition-speed: 0.3s;
+            --container-max-width: 900px;
         }
 
         * {
@@ -24,20 +34,20 @@
         }
 
         html {
-            /* We will handle smooth scroll via JS for more control over speed */
-            scroll-behavior: auto;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-size: 20px; /* Increased from default */
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
+        /* 3D Background Canvas */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -46,48 +56,97 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.5; /* Slightly reduced for wave subtlety */
         }
 
         .container {
-            max-width: 1000px; /* Increased from 800px */
+            max-width: var(--container-max-width);
             margin: 0 auto;
-            padding: 0 2.5rem;
-            position: relative;
-            z-index: 1;
+            padding: 0 2rem;
         }
 
+        /* Glassmorphism Utility */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        /* Section Styling */
         section {
-            padding: 100px 0; /* Slightly increased padding */
-            border-bottom: 1px dashed var(--border-color);
+            padding: 6rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        section:last-of-type {
-            border-bottom: none;
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-purple);
+            border-radius: 2px;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
 
         /* Hero */
         #hero {
-            height: 50vh;
+            height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
+            padding-top: 0;
         }
 
-        h1 {
-            font-size: 2.6rem; /* Increased from 2rem */
-            font-weight: normal;
-            margin-bottom: 0.7rem;
-            color: var(--text-primary);
-            border-bottom: 3px solid var(--accent-color);
-            display: inline-block;
+        .hero-name {
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 60%, var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
-            font-size: 1.4rem; /* Increased from 1.1rem */
+            font-size: 1.5rem;
             color: var(--text-secondary);
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 400;
         }
 
         .nav-links {
@@ -96,286 +155,263 @@
             flex-wrap: wrap;
         }
 
-        .cta-button {
-            display: inline-block;
-            padding: 10px 20px; /* Scaled up */
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
             text-decoration: none;
-            font-weight: bold;
-            border: 2px solid var(--text-primary);
-            transition: var(--transition);
-            font-size: 1.1rem; /* Increased from 0.9rem */
-            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
         }
 
-        .cta-button:hover {
-            background-color: var(--text-primary);
-            color: var(--bg-color);
-            transform: translate(3px, 3px);
-            box-shadow: -6px -6px 0px var(--accent-color);
-        }
-
-        /* Generic Section Styling */
-        h2 {
-            font-size: 1.4rem; /* Increased from 1.1rem */
-            margin-bottom: 2rem;
-            color: var(--text-primary);
-            background: var(--accent-color);
+        .btn-primary {
+            background: var(--text-primary);
             color: white;
-            padding: 4px 14px;
-            display: inline-block;
         }
 
-        .merged-title {
-            font-size: 1.4rem; /* Increased from 1.1rem */
-            line-height: 1.3;
-            max-width: 100%;
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-2px);
         }
 
-        h3.section-subtitle {
-            font-size: 1.2rem; /* Increased from 0.95rem */
-            margin: 2rem 0 1.2rem 0;
-            color: var(--text-secondary);
-            text-decoration: underline;
+        .btn-outline {
+            border: 1px solid #ddd;
+            color: var(--text-primary);
         }
 
-        .content-text {
-            font-size: 1.2rem; /* Increased from 0.95rem */
-            max-width: 800px; /* Broadened */
+        .btn-outline:hover {
+            background: #f0f0f0;
+            border-color: #ccc;
         }
 
-        /* Cards and Lists */
-        .item-grid {
+        /* Projects */
+        .project-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
-        .item-card {
-            background-color: var(--card-bg);
-            padding: 1.8rem; /* Scaled up */
-            border: 1px solid var(--border-color);
-            transition: var(--transition);
+        .project-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
         }
 
-        .item-card:hover {
-            border-color: var(--text-primary);
-            box-shadow: 6px 6px 0px var(--accent-green); /* Changed to green shadow */
-        }
-
-        .item-card h4 {
-            font-size: 1.4rem; /* Increased from 1.1rem */
-            margin-bottom: 0.6rem;
-        }
-
-        .item-card p {
+        .project-card p {
             color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 1.15rem; /* Increased from 0.9rem */
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
         }
 
-        .link-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
+        .project-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(177, 156, 217, 0.1);
+            color: var(--accent-purple);
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        .link-icon {
+            font-size: 0.9rem;
             color: var(--text-primary);
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem; /* Increased from 0.85rem */
-            transition: var(--transition);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
         }
 
-        .link-text:hover {
+        .link-icon:hover {
             text-decoration: underline;
-            color: var(--accent-green); /* Added green hover */
-        }
-
-        /* Specific Lists */
-        ul.simple-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        ul.simple-list li {
-            margin-bottom: 0.8rem;
-            position: relative;
-            padding-left: 1.5rem;
-            font-size: 1.15rem; /* Scaled up */
-        }
-
-        ul.simple-list li::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: var(--accent-green); /* Changed marker to green */
-            font-weight: bold;
-        }
-
-        /* Popup Notification */
-        #popup {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--text-primary);
-            color: var(--bg-color);
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        #popup.show {
-            opacity: 1;
         }
 
         /* Die Interaction Zone */
         #die-zone {
             position: fixed;
-            top: 50px;
-            left: 20px;
-            width: 300px;
-            height: 300px;
+            top: 40px;
+            left: 40px;
+            width: 120px;
+            height: 120px;
             cursor: pointer;
             z-index: 100;
-            background: transparent;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        #die-zone:hover {
+            transform: scale(1.1);
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
         }
 
         /* Footer */
         footer {
-            padding: 60px 0;
+            padding: 4rem 0;
+            border-top: 1px solid #eee;
+            color: var(--text-secondary);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1rem; /* Increased from 0.8rem */
-            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         @media (max-width: 600px) {
-            section { padding: 40px 0; }
-            #die-zone { display: none; } /* Hide die on mobile for space */
+            .hero-name { font-size: 3rem; }
+            #die-zone { top: 20px; left: 20px; width: 80px; height: 80px; }
+            footer { flex-direction: column; gap: 1rem; text-align: center; }
         }
     </style>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-    <div id="die-zone" title="Click the floating D20!"></div>
-    <div id="popup">Email copied!</div>
+    <div id="die-zone" title="Click the D20!"></div>
+    <div id="toast">Email copied!</div>
 
     <main class="container">
         <!-- Hero Section -->
-        <section id="hero">
-            <h1>Kushal Gangadhar</h1>
-            <p class="hero-subtitle">Student & Maker.</p>
+        <section id="hero" class="visible">
+            <span class="mono" style="margin-bottom: 1rem; display: block;">/hi, i'm</span>
+            <h1 class="hero-name">Kushal Gangadhar</h1>
+            <p class="hero-subtitle">Student & Maker of things on the web.</p>
             <div class="nav-links">
-                <a href="#projects" class="cta-button js-scroll">/projects</a>
-                <a href="#cv" class="cta-button js-scroll">/CV</a>
-                <a href="#extra" class="cta-button js-scroll">/personal</a>
+                <a href="#projects" class="btn btn-primary">Projects</a>
+                <a href="#cv" class="btn btn-outline">CV</a>
+                <a href="#contact" class="btn btn-outline">Contact</a>
             </div>
         </section>
 
         <!-- About Section -->
         <section id="about">
             <h2>About</h2>
-            <p class="content-text">
-                I’m wrapping up my BS in Computer Science and am fascinated by the mix of formal verification, distributed systems, and AI. I love the challenge of turning rigorous theory into things that actually work and create value.
-            </p>
+            <div class="glass-card">
+                <p>
+                    I’m wrapping up my BS in Computer Science and am fascinated by the mix of <strong>formal verification</strong>, <strong>distributed systems</strong>, and <strong>AI</strong>. I love the challenge of turning rigorous theory into things that actually work and create value.
+                </p>
+            </div>
         </section>
 
         <!-- Projects Section -->
         <section id="projects">
             <h2>Projects</h2>
             
-            <h3 class="section-subtitle">Personal Projects</h3>
-            <div class="item-grid">
-                <div class="item-card">
-                    <h4>Lumina Dashboard</h4>
+            <p class="mono" style="margin-bottom: 1.5rem;">/personal_projects</p>
+            <div class="project-grid">
+                <div class="glass-card project-card">
+                    <span class="project-tag">TypeScript</span>
+                    <h3>Lumina Dashboard</h3>
                     <p>A data visualization engine with real-time streaming and filtering logic.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon">view_source ↗</a>
                 </div>
-                <div class="item-card">
-                    <h4>Aura Shop</h4>
+                <div class="glass-card project-card">
+                    <span class="project-tag">React</span>
+                    <h3>Aura Shop</h3>
                     <p>A headless e-commerce storefront optimized for Core Web Vitals.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon">view_source ↗</a>
                 </div>
             </div>
 
-            <h3 class="section-subtitle">Academic Projects</h3>
-            <div class="item-grid">
-                <div class="item-card">
-                    <h4>Formal Verification Research</h4>
+            <p class="mono" style="margin: 3rem 0 1.5rem 0;">/academic_research</p>
+            <div class="project-grid">
+                <div class="glass-card project-card">
+                    <span class="project-tag">Logic</span>
+                    <h3>Formal Verification Research</h3>
                     <p>Investigating automated proof techniques for distributed consensus protocols.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-text">[view_source]</a>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon">view_source ↗</a>
                 </div>
             </div>
         </section>
 
         <!-- CV Section -->
         <section id="cv">
-            <h2>CV</h2>
-            <p class="content-text">
-                You can find my detailed academic and professional history here: 
-                <a href="cv.pdf" class="link-text" style="font-size: 1rem;">[download_cv_pdf]</a>
-            </p>
+            <h2>Experience</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 1.5rem;">
+                    You can find my detailed academic and professional history in my CV.
+                </p>
+                <a href="cv.pdf" class="btn btn-primary">Download CV (PDF)</a>
+            </div>
         </section>
 
-        <!-- Merged Section -->
+        <!-- Personal Section -->
         <section id="extra">
-            <h2 class="merged-title">What i do when i'm not doing the things i've talked about above</h2>
-            
-            
-            <div class="item-grid">
-                <div class="item-card">
-                    <p>I love reading. Usually fiction but sometimes Indian non-fiction too. </p>
-                    <p>Some of my favourite writers include Arundhati Roy, Olga Tokarczuk and Patrick Rothfuss among others. Find me on <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-text">StoryGraph</a> </p>
-                    <p>
-                        I regularly watch anime. Here is my <a href="https://myanimelist.net/profile/kushalgangs" class="link-text">MAL Account</a>
-                    </p>
-                    <p>I enjoy watching and playing football and table tennis</p>
-                    <p>I find myself listening to the same set of 10 songs for weeks</p>
+            <h2>Beyond Code</h2>
+            <div class="glass-card">
+                <p style="margin-bottom: 1rem;">
+                    When I'm not coding, I'm usually reading. I enjoy both fiction and Indian non-fiction. 
+                    Favorite authors include <strong>Arundhati Roy</strong>, <strong>Olga Tokarczuk</strong>, and <strong>Patrick Rothfuss</strong>.
+                </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-icon">StoryGraph ↗</a>
+                    <a href="https://myanimelist.net/profile/kushalgangs" class="link-icon">MyAnimeList ↗</a>
                 </div>
+                <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid rgba(0,0,0,0.05);">
+                <p>
+                    I also enjoy football, table tennis, and listening to the same set of 10 songs for weeks on end.
+                </p>
             </div>
         </section>
 
         <!-- Contact Section -->
         <section id="contact">
-            <h2>Contact and Socials</h2>
-            <a href="javascript:void(0)" onclick="copyEmail(event)" class="contact-email" style="font-size: 1.1rem; color: var(--text-primary); text-decoration: underline; font-weight: bold; margin-bottom: 1rem; display: block;">eMail</a>
-            <div class="nav-links">
-                <a href="https://github.com/kushal-gangadhar" class="link-text">GitHub</a>
-                <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="link-text">LinkedIn</a>
+            <h2>Get in Touch</h2>
+            <div class="glass-card" style="text-align: center; padding: 3rem;">
+                <h3 style="margin-bottom: 1rem;">Let's build something together.</h3>
+                <p style="margin-bottom: 2rem; color: var(--text-secondary);">I'm always open to discussing new projects or research opportunities.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="mailto:kushalgangadhariah@gmail.com" onclick="copyEmail(event)" class="btn btn-primary">Copy Email</a>
+                    <a href="https://github.com/kushal-gangadhar" class="btn btn-outline">GitHub</a>
+                    <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="btn btn-outline">LinkedIn</a>
+                </div>
             </div>
         </section>
 
         <!-- Footer -->
         <footer>
             <p>&copy; 2026 Kushal Gangadhar</p>
-            <a href="#hero" class="link-text js-scroll" style="color: var(--text-secondary);">back_to_top</a>
+            <a href="#hero" class="link-icon">back_to_top ↑</a>
         </footer>
     </main>
 
     <script>
+        // --- Background 3D Animation ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
 
         let dots = [];
-        const dotSpacing = 60; // Grid spacing
-        const jitterAmount = 8; // Neighbourhood size
+        const dotSpacing = 80;
+        const jitterAmount = 4;
 
         // Double Pyramid (Octahedron)
         class Octahedron {
             constructor() {
-                this.size = 120;
+                this.size = 140;
                 this.angleX = 0;
                 this.angleY = 0;
                 this.nodes = [
-                    [0, -1.2, 0], [0, 1.2, 0], // Top, Bottom
-                    [1, 0, 0], [0, 0, 1], [-1, 0, 0], [0, 0, -1] // Corners
+                    [0, -1.2, 0], [0, 1.2, 0],
+                    [1, 0, 0], [0, 0, 1], [-1, 0, 0], [0, 0, -1]
                 ];
                 this.edges = [
                     [0, 2], [0, 3], [0, 4], [0, 5],
@@ -384,36 +420,28 @@
                 ];
             }
 
-            rotate(ax, ay) {
-                this.angleX += ax;
-                this.angleY += ay;
-            }
+            rotate(ax, ay) { this.angleX += ax; this.angleY += ay; }
 
             draw() {
-                const offsetX = canvas.width - 200; // Bottom right
-                const offsetY = canvas.height - 200;
-                const perspective = 500;
+                const offsetX = canvas.width * 0.85;
+                const offsetY = canvas.height * 0.75;
+                const perspective = 600;
 
                 const projected = this.nodes.map(node => {
-                    let x = node[0] * this.size;
-                    let y = node[1] * this.size;
-                    let z = node[2] * this.size;
-
+                    let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
                     let cY = Math.cos(this.angleY), sY = Math.sin(this.angleY);
                     let tx = x * cY - z * sY, tz = x * sY + z * cY;
                     x = tx; z = tz;
-
                     let cX = Math.cos(this.angleX), sX = Math.sin(this.angleX);
                     let ty = y * cX - z * sX; tz = y * sX + z * cX;
                     y = ty; z = tz;
-
                     const scale = perspective / (perspective + z);
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
 
                 ctx.beginPath();
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = 'rgba(177, 156, 217, 0.4)';
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(177, 156, 217, 0.2)';
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
@@ -425,7 +453,7 @@
         // 20-sided Die (Icosahedron)
         class D20 {
             constructor() {
-                this.size = 100;
+                this.size = 110;
                 this.angleX = 0;
                 this.angleY = 0;
                 const phi = (1 + Math.sqrt(5)) / 2;
@@ -449,7 +477,7 @@
             rotate(ax, ay) { this.angleX += ax; this.angleY += ay; }
 
             draw() {
-                const offsetX = 150, offsetY = 200, perspective = 500;
+                const offsetX = 100, offsetY = 100, perspective = 600;
                 const projected = this.nodes.map(node => {
                     let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
                     let cY = Math.cos(this.angleY), sY = Math.sin(this.angleY);
@@ -462,117 +490,88 @@
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
                 ctx.beginPath();
-                ctx.lineWidth = 3.0; // Increased from 1.5
-                ctx.strokeStyle = 'rgba(190, 242, 100, 0.8)'; // Increased from 0.4
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = 'rgba(190, 242, 100, 0.4)';
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
                 });
                 ctx.stroke();
-
-                // Add a very subtle fill to the die for volume
-                ctx.fillStyle = 'rgba(190, 242, 100, 0.1)';
-                ctx.fill();
             }
         }
 
         const octa = new Octahedron();
         const d20 = new D20();
 
-        class Dot {
-            constructor(x, y, color) {
-                this.baseX = x; this.baseY = y; this.color = color;
-                this.x = x; this.y = y; this.radius = 2.5;
-                this.targetX = x; this.targetY = y; this.timer = 0;
-            }
-            update() {
-                this.timer--;
-                if (this.timer <= 0) {
-                    this.targetX = this.baseX + (Math.random() - 0.5) * jitterAmount * 2;
-                    this.targetY = this.baseY + (Math.random() - 0.5) * jitterAmount * 2;
-                    this.timer = 10 + Math.random() * 40;
-                }
-                this.x += (this.targetX - this.x) * 0.05;
-                this.y += (this.targetY - this.y) * 0.05;
-            }
-            draw() {
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color; ctx.fill();
-            }
-        }
-
         function resize() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            dots = [];
-            const cols = Math.ceil(canvas.width / dotSpacing) + 1;
-            const rows = Math.ceil(canvas.height / dotSpacing) + 1;
-            for (let i = 0; i < cols; i++) {
-                for (let j = 0; j < rows; j++) {
-                    const x = i * dotSpacing, y = j * dotSpacing;
-                    const isLime = (i + j) % 2 === 0;
-                    const color = isLime ? 'rgba(190, 242, 100, 0.4)' : 'rgba(244, 114, 182, 0.4)';
-                    dots.push(new Dot(x, y, color));
-                }
-            }
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            dots.forEach(dot => { dot.update(); dot.draw(); });
-            octa.rotate(0.008, 0.012); octa.draw();
-            d20.rotate(-0.01, 0.005); d20.draw();
+            // Subtle ambient grid
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0,0,0,0.02)';
+            for(let x=0; x<canvas.width; x+=dotSpacing) {
+                ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
+            }
+            for(let y=0; y<canvas.height; y+=dotSpacing) {
+                ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
+            }
+            ctx.stroke();
+
+            octa.rotate(0.004, 0.006); octa.draw();
+            d20.rotate(-0.005, 0.003); d20.draw();
             requestAnimationFrame(animate);
         }
 
-        function slowSmoothScroll(targetId) {
-            const targetElement = document.querySelector(targetId);
-            if (!targetElement) return;
-            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-            const startPosition = window.pageYOffset, distance = targetPosition - startPosition;
-            const duration = 1500; let start = null;
-            function step(timestamp) {
-                if (!start) start = timestamp;
-                const progress = timestamp - start, time = Math.min(progress / duration, 1);
-                const ease = time < 0.5 ? 4 * time * time * time : 1 - Math.pow(-2 * time + 2, 3) / 2;
-                window.scrollTo(0, startPosition + distance * ease);
-                if (progress < duration) requestAnimationFrame(step);
-            }
-            requestAnimationFrame(step);
-        }
-
+        // --- Interaction Logic ---
         function copyEmail(e) {
             e.preventDefault();
             const email = "kushalgangadhariah@gmail.com";
             navigator.clipboard.writeText(email).then(() => {
-                const popup = document.getElementById('popup');
-                popup.classList.add('show');
-                setTimeout(() => popup.classList.remove('show'), 2000);
+                showToast("Email copied to clipboard!");
             });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         document.getElementById('die-zone').addEventListener('click', () => {
             const roll = Math.floor(Math.random() * 20) + 1;
             const messages = [
-                "Critical failure! But the die is still pretty.",
+                "Critical failure! 1.",
                 "Better luck next time.", "A solid effort.", "Not bad at all.",
                 "You're getting warmer.", "Luck is on your side.", 
-                "Great roll!", "Critical hit! You've unlocked... a nice feeling."
+                "Great roll!", "Critical hit! 20!"
             ];
-            const msg = roll === 20 ? messages[7] : (roll === 1 ? messages[0] : `You rolled a ${roll}. ${messages[Math.floor(Math.random() * 6) + 1]}`);
-            const popup = document.getElementById('popup');
-            popup.innerText = msg;
-            popup.classList.add('show');
-            setTimeout(() => {
-                popup.classList.remove('show');
-                setTimeout(() => popup.innerText = "Email copied!", 300);
-            }, 3000);
+            let msg;
+            if (roll === 20) msg = messages[7];
+            else if (roll === 1) msg = messages[0];
+            else msg = `You rolled a ${roll}. ${messages[Math.floor(Math.random() * 5) + 1]}`;
+            showToast(msg);
         });
 
-        document.querySelectorAll('.js-scroll').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                slowSmoothScroll(link.getAttribute('href'));
+        // --- Scroll Animations ---
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
         });
 
         window.addEventListener('resize', resize);
