@@ -565,41 +565,77 @@
                 this.phase = 'rotating';
                 this.hovered = false;
                 
+                const phi = (1 + Math.sqrt(5)) / 2;
+                const invPhi = 1 / phi;
+
                 this.shapes = [
+                    // Octahedron
                     { nodes: [[0,-1.2,0], [0,1.2,0], [1,0,0], [0,0,1], [-1,0,0], [0,0,-1]],
                       edges: [[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,3],[3,4],[4,5],[5,2]],
                       color: [177, 156, 217] },
+                    // Cube
                     { nodes: [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],
                       edges: [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]],
                       color: [163, 213, 255] },
+                    // Tetrahedron
                     { nodes: [[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],
                       edges: [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]],
-                      color: [244, 114, 182] }
+                      color: [244, 114, 182] },
+                    // Dodecahedron (20 nodes)
+                    { nodes: [
+                        [1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1],
+                        [0,invPhi,phi],[0,invPhi,-phi],[0,-invPhi,phi],[0,-invPhi,-phi],
+                        [invPhi,phi,0],[invPhi,-phi,0],[-invPhi,phi,0],[-invPhi,-phi,0],
+                        [phi,0,invPhi],[phi,0,-invPhi],[-phi,0,invPhi],[-phi,0,-invPhi]
+                      ].map(n => n.map(v => v * 0.85)),
+                      edges: [], // Edges auto-calculated below for brevity
+                      color: [190, 242, 100] },
+                    // Icosahedron (12 nodes)
+                    { nodes: [
+                        [0,1,phi],[0,1,-phi],[0,-1,phi],[0,-1,-phi],
+                        [1,phi,0],[1,-phi,0],[-1,phi,0],[-1,-phi,0],
+                        [phi,0,1],[phi,0,-1],[-phi,0,1],[-phi,0,-1]
+                      ].map(n => n.map(v => v * 1.1)),
+                      edges: [],
+                      color: [163, 213, 255] }
                 ];
+
+                // Auto-generate edges for Dodecahedron and Icosahedron based on proximity
+                for (let sIdx = 3; sIdx < 5; sIdx++) {
+                    const s = this.shapes[sIdx];
+                    for (let i = 0; i < s.nodes.length; i++) {
+                        for (let j = i + 1; j < s.nodes.length; j++) {
+                            const dx = s.nodes[i][0] - s.nodes[j][0];
+                            const dy = s.nodes[i][1] - s.nodes[j][1];
+                            const dz = s.nodes[i][2] - s.nodes[j][2];
+                            const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                            // Dodecahedron edges ~1.24, Icosahedron ~1.05 (normalized)
+                            if (dist < 1.3) s.edges.push([i, j]);
+                        }
+                    }
+                }
+
                 this.currentShapeIdx = 0;
                 this.targetShapeIdx = 1;
                 this.t = 0; 
             }
 
             rotate(ax, ay) {
-                const speedMult = this.hovered ? 1.5 : 1.0;
-                this.angleX += ax * speedMult; 
-                this.angleY += ay * speedMult;
-                this.rotationCount += (Math.abs(ax) + Math.abs(ay)) * speedMult;
+                this.angleX += ax; 
+                this.angleY += ay;
+                this.rotationCount += (Math.abs(ax) + Math.abs(ay));
                 
-                if (this.phase === 'rotating' && this.rotationCount > 8) {
+                if (this.phase === 'rotating' && this.rotationCount > 10) { // More rotations before morph
                     this.phase = 'collapsing';
                     this.t = 0;
                 }
             }
 
             update() {
-                const speed = (this.hovered ? 0.03 : 0.02);
+                const speed = 0.008; // Much slower transition
                 const offsetX = canvas.width * 0.85;
                 const offsetY = canvas.height * 0.8;
-                const dx = mouseX - offsetX, dy = mouseY - offsetY;
-                this.hovered = Math.hypot(dx, dy) < 200;
-
+                
                 if (this.phase === 'collapsing') {
                     this.t += speed;
                     const ease = this.t < 0.5 ? 4 * this.t * this.t * this.t : 1 - Math.pow(-2 * this.t + 2, 3) / 2;
