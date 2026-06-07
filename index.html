@@ -10,18 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Clean Minimalist Palette */
-            --bg-color: #fcfcfd;
-            --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
+            /* Pastel Theme Palette */
+            --bg-color: #f8f7ff; /* Soft Lavender White */
+            --text-primary: #2d2a3d;
+            --text-secondary: #5e5a75;
             --accent-purple: #b19cd9;
             --accent-lime: #bef264;
             --accent-pink: #f472b6;
+            --accent-blue: #a3d5ff; /* Added for richer gradients */
             
             /* Glassmorphism & Depth */
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --card-shadow: 0 8px 32px 0 rgba(177, 156, 217, 0.15);
             
             --transition-speed: 0.3s;
             --container-max-width: 900px;
@@ -40,6 +41,7 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
+            background: linear-gradient(135deg, #f8f7ff 0%, #fff0f6 100%); /* Pastel Gradient Background */
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
@@ -56,6 +58,7 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
+            opacity: 0.8; /* Pronounced background */
         }
 
         .container {
@@ -67,27 +70,27 @@
         /* Glassmorphism Utility */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 20px;
             box-shadow: var(--card-shadow);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
 
         .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 45px 0 rgba(177, 156, 217, 0.25);
         }
 
         /* Section Styling */
         section {
-            padding: 6rem 0;
+            padding: 8rem 0;
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(25px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
         section.visible {
@@ -98,62 +101,72 @@
         /* Typography */
         h1, h2, h3 {
             font-weight: 700;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
 
         h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 2.5rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         h2::before {
             content: '';
             display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: var(--accent-purple);
-            border-radius: 2px;
+            width: 14px;
+            height: 14px;
+            background: linear-gradient(135deg, var(--accent-lime), var(--accent-blue));
+            border-radius: 4px;
         }
 
         .mono {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            font-size: 0.95rem;
+            color: var(--accent-purple);
+            font-weight: 600;
         }
 
         /* Hero */
         #hero {
-            height: 80vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding-top: 0;
+            justify-content: flex-start;
+            padding-top: 30vh; /* Start 30% from the top */
         }
 
         .hero-name {
-            font-size: clamp(3rem, 8vw, 4.5rem);
-            line-height: 1.1;
+            font-size: clamp(3.5rem, 10vw, 5.5rem);
+            line-height: 1.05;
             margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent-purple), var(--accent-pink));
+            background: linear-gradient(135deg, 
+                var(--text-primary) 20%, 
+                var(--accent-purple) 40%, 
+                var(--accent-pink) 60%, 
+                var(--accent-lime) 80%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.7rem;
             color: var(--text-secondary);
             margin-bottom: 2.5rem;
             font-weight: 400;
+            letter-spacing: -0.01em;
         }
 
         .hero-intro {
             max-width: 650px;
             margin-bottom: 4rem;
             margin-top: 1rem;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
             line-height: 1.8;
         }
@@ -161,6 +174,7 @@
         .hero-intro strong {
             color: var(--text-primary);
             font-weight: 600;
+            border-bottom: 2px solid var(--accent-lime);
         }
 
         .nav-links {
@@ -170,15 +184,15 @@
         }
 
         .btn {
-            padding: 0.9rem 1.8rem;
-            border-radius: 12px;
+            padding: 1rem 2rem;
+            border-radius: 14px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             transition: all var(--transition-speed);
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
+            gap: 0.6rem;
+            font-size: 1.05rem;
         }
 
         .btn-primary {
@@ -188,115 +202,110 @@
         }
 
         .btn-primary:hover {
-            background: #333;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px 0 rgba(0,0,0,0.15);
+            background: #403b58;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px 0 rgba(0,0,0,0.2);
         }
 
         .btn-outline {
-            border: 1px solid #ddd;
+            border: 2px solid #e2e2e2;
             color: var(--text-primary);
-            background: white;
+            background: var(--glass-bg);
+            backdrop-filter: blur(5px);
         }
 
         .btn-outline:hover {
-            background: #f8f9fa;
-            border-color: #ccc;
-            transform: translateY(-2px);
+            background: white;
+            border-color: var(--accent-purple);
+            transform: translateY(-3px);
+            color: var(--accent-purple);
         }
 
         /* Projects */
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
         }
 
         .project-card h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.4rem;
         }
 
         .project-card p {
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
+            margin-bottom: 1.8rem;
+            font-size: 1.05rem;
         }
 
         .project-tag {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            padding: 0.2rem 0.5rem;
-            background: rgba(177, 156, 217, 0.1);
+            font-size: 0.8rem;
+            padding: 0.3rem 0.7rem;
+            background: rgba(177, 156, 217, 0.15);
             color: var(--accent-purple);
-            border-radius: 4px;
-            margin-right: 0.5rem;
+            border-radius: 6px;
+            margin-right: 0.6rem;
+            font-weight: 600;
         }
 
         .link-icon {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-primary);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.4rem;
         }
 
         .link-icon:hover {
-            text-decoration: underline;
+            color: var(--accent-purple);
         }
 
-        /* Typography Refinements */
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 2.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: linear-gradient(135deg, var(--text-primary) 60%, var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        h2::before {
-            content: '';
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            border-radius: 2px;
-        }
+        /* Die Interaction Zone */
         #die-zone {
             position: fixed;
-            top: 40px;
-            left: 40px;
-            width: 120px;
-            height: 120px;
+            top: 50px;
+            left: 50px;
+            width: 180px; /* Increased size by 40%+ */
+            height: 180px;
             cursor: pointer;
             z-index: 100;
             border-radius: 50%;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
         #die-zone:hover {
-            transform: scale(1.1);
+            transform: scale(1.15) rotate(10deg);
         }
 
         /* Toast Notification */
         #toast {
             position: fixed;
-            bottom: 40px;
+            bottom: 50px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
+            transform: translateX(-50%) translateY(120px);
             background: var(--text-primary);
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 1.2rem 2.5rem;
+            border-radius: 20px;
+            font-weight: 500;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 1000;
+            max-width: 90vw;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        #toast strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 0.4rem;
+            color: var(--accent-lime);
+            font-weight: 800;
         }
 
         #toast.show {
@@ -305,31 +314,32 @@
 
         /* Footer */
         footer {
-            padding: 4rem 0;
-            border-top: 1px solid #eee;
+            padding: 6rem 0;
+            border-top: 1px solid rgba(177, 156, 217, 0.2);
             color: var(--text-secondary);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         @media (max-width: 600px) {
-            .hero-name { font-size: 3rem; }
-            #die-zone { top: 20px; left: 20px; width: 80px; height: 80px; }
-            footer { flex-direction: column; gap: 1rem; text-align: center; }
+            #hero { padding-top: 20vh; }
+            .hero-name { font-size: 3.5rem; }
+            #die-zone { top: 20px; left: 20px; width: 100px; height: 100px; }
+            footer { flex-direction: column; gap: 1.5rem; text-align: center; }
         }
     </style>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-    <div id="die-zone" title="Click the D20!"></div>
-    <div id="toast">Email copied!</div>
+    <div id="die-zone" title="Roll the D20 for a random fact!"></div>
+    <div id="toast"></div>
 
     <main class="container">
         <!-- Hero Section -->
         <section id="hero" class="visible">
-            <span class="mono" style="margin-bottom: 1rem; display: block;">/hi, i'm</span>
+            <span class="mono" style="margin-bottom: 1.2rem; display: block;">/hi, i'm</span>
             <h1 class="hero-name">Kushal Gangadhar</h1>
             <p class="hero-subtitle">Student & Maker of things on the web.</p>
             <div class="hero-intro">
@@ -338,81 +348,98 @@
                 </p>
             </div>
             <div class="nav-links">
-                <a href="#projects" class="btn btn-primary">Projects</a>
-                <a href="#cv" class="btn btn-outline">CV</a>
-                <a href="#contact" class="btn btn-outline">Contact</a>
+                <a href="#projects" class="btn btn-primary">View Projects</a>
+                <a href="#cv" class="btn btn-outline">Curriculum Vitae</a>
+                <a href="#contact" class="btn btn-outline">Get in Touch</a>
             </div>
         </section>
 
         <!-- Projects Section -->
         <section id="projects">
-            <h2>Projects</h2>
+            <h2>Featured Projects</h2>
             
-            <p class="mono" style="margin-bottom: 1.5rem;">/personal_projects</p>
+            <p class="mono" style="margin-bottom: 2rem;">/personal_projects</p>
             <div class="project-grid">
                 <div class="glass-card project-card">
-                    <span class="project-tag">TypeScript</span>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="project-tag">TypeScript</span>
+                        <span class="project-tag">D3.js</span>
+                    </div>
                     <h3>Lumina Dashboard</h3>
-                    <p>A data visualization engine with real-time streaming and filtering logic.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-icon">view_source ↗</a>
+                    <p>A high-performance data visualization engine with real-time streaming and complex filtering logic.</p>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon">Source Code ↗</a>
                 </div>
                 <div class="glass-card project-card">
-                    <span class="project-tag">React</span>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">Node.js</span>
+                    </div>
                     <h3>Aura Shop</h3>
-                    <p>A headless e-commerce storefront optimized for Core Web Vitals.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-icon">view_source ↗</a>
+                    <p>A modern, headless e-commerce storefront optimized for speed and perfect Core Web Vitals.</p>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon">Source Code ↗</a>
                 </div>
             </div>
 
-            <p class="mono" style="margin: 3rem 0 1.5rem 0;">/academic_research</p>
+            <p class="mono" style="margin: 4rem 0 2rem 0;">/academic_research</p>
             <div class="project-grid">
                 <div class="glass-card project-card">
-                    <span class="project-tag">Logic</span>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="project-tag">TLA+</span>
+                        <span class="project-tag">Coq</span>
+                    </div>
                     <h3>Formal Verification Research</h3>
-                    <p>Investigating automated proof techniques for distributed consensus protocols.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-icon">view_source ↗</a>
+                    <p>Investigating automated proof techniques for distributed consensus protocols like Raft and Paxos.</p>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon">Research Details ↗</a>
                 </div>
             </div>
         </section>
 
-        <!-- CV Section -->
+        <!-- Experience Section -->
         <section id="cv">
-            <h2>Experience</h2>
+            <h2>Experience & Skills</h2>
             <div class="glass-card">
-                <p style="margin-bottom: 1.5rem;">
-                    You can find my detailed academic and professional history in my CV.
+                <p style="margin-bottom: 2rem; font-size: 1.15rem;">
+                    My background blends academic rigor with practical engineering. I specialize in building reliable, scalable systems.
                 </p>
-                <a href="cv.pdf" class="btn btn-primary">Download CV (PDF)</a>
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem;">
+                    <span class="project-tag" style="background: rgba(190, 242, 100, 0.2); color: #6e8b2a;">Distributed Systems</span>
+                    <span class="project-tag" style="background: rgba(244, 114, 182, 0.2); color: #a13d72;">Formal Methods</span>
+                    <span class="project-tag" style="background: rgba(163, 213, 255, 0.2); color: #3d6a8e;">Full Stack Web</span>
+                    <span class="project-tag" style="background: rgba(177, 156, 217, 0.2); color: #5a4a7a;">AI/ML</span>
+                </div>
+                <a href="cv.pdf" class="btn btn-primary">Download Full CV (PDF)</a>
             </div>
         </section>
 
         <!-- Personal Section -->
         <section id="extra">
-            <h2>Beyond Code</h2>
+            <h2>Beyond the Screen</h2>
             <div class="glass-card">
-                <p style="margin-bottom: 1rem;">
-                    When I'm not coding, I'm usually reading. I enjoy both fiction and Indian non-fiction. 
-                    Favorite authors include <strong>Arundhati Roy</strong>, <strong>Olga Tokarczuk</strong>, and <strong>Patrick Rothfuss</strong>.
+                <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">
+                    I'm a voracious reader, moving between fiction and Indian non-fiction. 
+                    I'm currently fascinated by the works of <strong>Arundhati Roy</strong> and <strong>Olga Tokarczuk</strong>.
                 </p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-icon">StoryGraph ↗</a>
-                    <a href="https://myanimelist.net/profile/kushalgangs" class="link-icon">MyAnimeList ↗</a>
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <a href="https://app.thestorygraph.com/profile/icarys_14" class="link-icon">StoryGraph Profile ↗</a>
+                    <a href="https://myanimelist.net/profile/kushalgangs" class="link-icon">Anime List ↗</a>
                 </div>
-                <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid rgba(0,0,0,0.05);">
-                <p>
-                    I also enjoy football, table tennis, and listening to the same set of 10 songs for weeks on end.
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid rgba(177, 156, 217, 0.15);">
+                <p style="color: var(--text-secondary);">
+                    Outside of reading, you'll find me playing football, improving my table tennis serve, or cycling through my favorite set of 10 songs on repeat.
                 </p>
             </div>
         </section>
 
         <!-- Contact Section -->
         <section id="contact">
-            <h2>Get in Touch</h2>
-            <div class="glass-card" style="text-align: center; padding: 3rem;">
-                <h3 style="margin-bottom: 1rem;">Let's build something together.</h3>
-                <p style="margin-bottom: 2rem; color: var(--text-secondary);">I'm always open to discussing new projects or research opportunities.</p>
-                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <a href="mailto:kushalgangadhariah@gmail.com" onclick="copyEmail(event)" class="btn btn-primary">Copy Email</a>
+            <h2>Let's Connect</h2>
+            <div class="glass-card" style="text-align: center; padding: 4rem 2rem;">
+                <h3 style="margin-bottom: 1.2rem; font-size: 1.8rem;">Ready for the next challenge.</h3>
+                <p style="margin-bottom: 2.5rem; color: var(--text-secondary); max-width: 500px; margin-left: auto; margin-right: auto;">
+                    I'm currently looking for opportunities in distributed systems and formal verification.
+                </p>
+                <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="mailto:kushalgangadhariah@gmail.com" onclick="copyEmail(event)" class="btn btn-primary">Copy Email Address</a>
                     <a href="https://github.com/kushal-gangadhar" class="btn btn-outline">GitHub</a>
                     <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="btn btn-outline">LinkedIn</a>
                 </div>
@@ -422,7 +449,7 @@
         <!-- Footer -->
         <footer>
             <p>&copy; 2026 Kushal Gangadhar</p>
-            <a href="#hero" class="link-icon">back_to_top ↑</a>
+            <a href="#hero" class="link-icon">Return to Top ↑</a>
         </footer>
     </main>
 
@@ -433,23 +460,23 @@
 
         let dots = [];
         const dotSpacing = 80;
-        const jitterAmount = 4;
+        const jitterAmount = 6; /* Pronounced jitter */
 
         class Dot {
             constructor(x, y, color) {
                 this.baseX = x; this.baseY = y; this.color = color;
-                this.x = x; this.y = y; this.radius = 1.5;
+                this.x = x; this.y = y; this.radius = 2; /* Pronounced dots */
                 this.targetX = x; this.targetY = y; this.timer = 0;
             }
             update() {
                 this.timer--;
                 if (this.timer <= 0) {
-                    this.targetX = this.baseX + (Math.random() - 0.5) * jitterAmount * 4;
-                    this.targetY = this.baseY + (Math.random() - 0.5) * jitterAmount * 4;
-                    this.timer = 20 + Math.random() * 60;
+                    this.targetX = this.baseX + (Math.random() - 0.5) * jitterAmount * 5;
+                    this.targetY = this.baseY + (Math.random() - 0.5) * jitterAmount * 5;
+                    this.timer = 30 + Math.random() * 80;
                 }
-                this.x += (this.targetX - this.x) * 0.03;
-                this.y += (this.targetY - this.y) * 0.03;
+                this.x += (this.targetX - this.x) * 0.02;
+                this.y += (this.targetY - this.y) * 0.02;
             }
             draw() {
                 ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -460,7 +487,7 @@
         // Double Pyramid (Octahedron)
         class Octahedron {
             constructor() {
-                this.size = 140;
+                this.size = 180; /* Pronounced size */
                 this.angleX = 0;
                 this.angleY = 0;
                 this.nodes = [
@@ -478,8 +505,8 @@
 
             draw() {
                 const offsetX = canvas.width * 0.85;
-                const offsetY = canvas.height * 0.75;
-                const perspective = 600;
+                const offsetY = canvas.height * 0.8;
+                const perspective = 700;
 
                 const projected = this.nodes.map(node => {
                     let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
@@ -494,8 +521,8 @@
                 });
 
                 ctx.beginPath();
-                ctx.lineWidth = 1;
-                ctx.strokeStyle = 'rgba(177, 156, 217, 0.2)';
+                ctx.lineWidth = 1.5; /* Pronounced lines */
+                ctx.strokeStyle = 'rgba(177, 156, 217, 0.4)';
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
@@ -507,7 +534,7 @@
         // 20-sided Die (Icosahedron)
         class D20 {
             constructor() {
-                this.size = 110;
+                this.size = 160; /* Pronounced size */
                 this.angleX = 0;
                 this.angleY = 0;
                 const phi = (1 + Math.sqrt(5)) / 2;
@@ -531,7 +558,7 @@
             rotate(ax, ay) { this.angleX += ax; this.angleY += ay; }
 
             draw() {
-                const offsetX = 100, offsetY = 100, perspective = 600;
+                const offsetX = 140, offsetY = 140, perspective = 700;
                 const projected = this.nodes.map(node => {
                     let x = node[0] * this.size, y = node[1] * this.size, z = node[2] * this.size;
                     let cY = Math.cos(this.angleY), sY = Math.sin(this.angleY);
@@ -544,8 +571,8 @@
                     return [x * scale + offsetX, y * scale + offsetY];
                 });
                 ctx.beginPath();
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = 'rgba(190, 242, 100, 0.4)';
+                ctx.lineWidth = 2.5; /* Pronounced lines */
+                ctx.strokeStyle = 'rgba(190, 242, 100, 0.7)';
                 this.edges.forEach(e => {
                     ctx.moveTo(projected[e[0]][0], projected[e[0]][1]);
                     ctx.lineTo(projected[e[1]][0], projected[e[1]][1]);
@@ -566,9 +593,13 @@
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
                     const x = i * dotSpacing, y = j * dotSpacing;
-                    const isLime = (i + j) % 2 === 0;
-                    const color = isLime ? 'rgba(190, 242, 100, 0.2)' : 'rgba(244, 114, 182, 0.2)';
-                    dots.push(new Dot(x, y, color));
+                    const colorIndex = (i + j) % 3;
+                    const colors = [
+                        'rgba(177, 156, 217, 0.4)',
+                        'rgba(244, 114, 182, 0.4)',
+                        'rgba(163, 213, 255, 0.4)'
+                    ];
+                    dots.push(new Dot(x, y, colors[colorIndex]));
                 }
             }
         }
@@ -576,15 +607,10 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Draw Dots
-            dots.forEach(dot => {
-                dot.update();
-                dot.draw();
-            });
+            dots.forEach(dot => { dot.update(); dot.draw(); });
 
-            // Subtle ambient grid
             ctx.beginPath();
-            ctx.strokeStyle = 'rgba(0,0,0,0.01)';
+            ctx.strokeStyle = 'rgba(0,0,0,0.015)';
             for(let x=0; x<canvas.width; x+=dotSpacing) {
                 ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
             }
@@ -593,58 +619,67 @@
             }
             ctx.stroke();
 
-            octa.rotate(0.004, 0.006); octa.draw();
-            d20.rotate(-0.005, 0.003); d20.draw();
+            octa.rotate(0.003, 0.005); octa.draw();
+            d20.rotate(-0.004, 0.002); d20.draw();
             requestAnimationFrame(animate);
         }
+
+        // --- D20 Facts Data ---
+        const d20Facts = {
+            1: ["In binary, this is the beginning of everything.", "A critical miss, but even the best algorithms have edge cases.", "The atomic number of Hydrogen, the most abundant element.", "One is the only number that is neither prime nor composite.", "The loneliest number, according to Three Dog Night."],
+            2: ["The only even prime number.", "The number of bits in a single boolean choice.", "Binary code is built entirely on the dance between 0 and 2.", "Humans have 2 hemispheres in their brain, constantly syncing.", "The smallest number of people required for a conversation."],
+            3: ["The first odd prime number.", "Three points are the minimum needed to define a plane in 3D space.", "In photography, the 'Rule of Thirds' creates perfect balance.", "The number of spatial dimensions we perceive every day.", "A triangle is the most stable geometric shape."],
+            4: ["The number of cardinal directions: North, South, East, West.", "Four is the only number in English that has the same number of letters as its value.", "The number of nucleobases in DNA: A, C, G, and T.", "A square's internal angles always sum to 360 degrees.", "The number of seasons in a typical tropical year."],
+            5: ["The number of Platonic solids that exist in geometry.", "Humans typically have five senses to navigate the world.", "A pentagram was once a symbol of health and mystical balance.", "The number of fingers on a human hand.", "In music, a perfect fifth is the most consonant interval after the octave."],
+            6: ["The first 'perfect number'—it equals the sum of its divisors (1, 2, 3).", "In a honeycomb, bees use hexagonal cells for maximum efficiency.", "Carbon, the basis of all known life, has the atomic number 6.", "A standard guitar has 6 strings.", "The number of faces on a standard cube."],
+            7: ["The number of colors in a rainbow (traditionally).", "A week has seven days, a cycle used for millennia.", "There are seven logic gates used in digital circuitry.", "The number of rows in the periodic table of elements.", "In many cultures, 7 is considered the luckiest number."],
+            8: ["The number of bits in a byte—the fundamental unit of data.", "In music, an octave consists of eight notes.", "The atomic number of Oxygen, which keeps us going.", "A byte can represent 256 unique values (2 to the power of 8).", "The number of planets in our solar system."],
+            9: ["The highest single-digit number in the decimal system.", "In Norse mythology, there are nine worlds connected by Yggdrasil.", "The number of innings in a standard baseball game.", "A human pregnancy typically lasts nine months.", "The atomic number of Fluorine, the most reactive element."],
+            10: ["The base of our decimal system, thanks to our ten fingers.", "In computer science, 10 is the representation of 2 in binary.", "The number of years in a decade.", "Neon, the gas used for bright signs, has the atomic number 10.", "The number of commandments in various moral codes."],
+            11: ["The first 'repdigit'—a number with identical digits.", "Sodium (Na) has the atomic number 11.", "The number of players on a standard football (soccer) team.", "Apollo 11 was the first mission to land humans on the Moon.", "In binary, 11 represents the number 3."],
+            12: ["A 'dozen'—one of the most common units of grouping.", "The number of months in a year.", "The number of zodiac signs in both Western and Chinese astrology.", "There are 12 inches in a foot.", "The atomic number of Magnesium."],
+            13: ["A prime number often associated with superstition and 'Baker's Dozens'.", "The number of stripes on the United States flag.", "Aluminum has the atomic number 13.", "The 13th element in the Fibonacci sequence is 233.", "In lunar calendars, some years have 13 months."],
+            14: ["The atomic number of Silicon, the foundation of modern computing.", "The number of lines in a traditional sonnet.", "Two weeks is exactly fourteen days (a fortnight).", "Nitrogen has a standard atomic weight of approximately 14.", "In binary, 1110 represents 14."],
+            15: ["The atomic number of Phosphorus.", "The number of players on a rugby union team.", "A crystal anniversary marks 15 years.", "In many Latin cultures, the 'Quinceañera' celebrates the 15th birthday.", "The sum of any row, column, or diagonal in a 3x3 magic square."],
+            16: ["The base of the hexadecimal system (0-F).", "The number of bits in a 'half-word' in many architectures.", "Sulfur has the atomic number 16.", "A standard chessboard has 16 pawns.", "The number of Myers-Briggs personality types."],
+            17: ["A prime number known as 'The Least Random Number' among mathematicians.", "Chlorine has the atomic number 17.", "The number of syllables in a traditional Haiku (5-7-5).", "In many cultures, 17 is considered a very spiritual number.", "The 17th Fibonacci number is 1597."],
+            18: ["The atomic number of Argon, a noble gas.", "The age of legal adulthood in many countries.", "The number of holes on a standard golf course.", "In many cultures, 18 is a symbol of 'life' or 'good luck'.", "A standard deck of cards has 18 red cards (if you ignore face cards)."],
+            19: ["The last teen number and a strong prime.", "Potassium has the atomic number 19.", "The number of years in a Metonic cycle (moon phases).", "In binary, 10011 represents 19.", "The Sun card in Tarot is often the 19th card."],
+            20: ["A 'score'—as in 'four score and seven years ago'.", "Calcium has the atomic number 20.", "The number of faces on an Icosahedron (a D20!).", "Humans have 20 'baby' teeth before they fall out.", "In binary, 10100 represents 20."]
+        };
 
         // --- Interaction Logic ---
         function copyEmail(e) {
             e.preventDefault();
             const email = "kushalgangadhariah@gmail.com";
             navigator.clipboard.writeText(email).then(() => {
-                showToast("Email copied to clipboard!");
+                showToast("<strong>Success!</strong> Email copied to clipboard.");
             });
         }
 
-        function showToast(msg) {
+        function showToast(content) {
             const toast = document.getElementById('toast');
-            toast.innerText = msg;
+            toast.innerHTML = content;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            setTimeout(() => toast.classList.remove('show'), 5000);
         }
 
         document.getElementById('die-zone').addEventListener('click', () => {
             const roll = Math.floor(Math.random() * 20) + 1;
-            const messages = [
-                "Critical failure! 1.",
-                "Better luck next time.", "A solid effort.", "Not bad at all.",
-                "You're getting warmer.", "Luck is on your side.", 
-                "Great roll!", "Critical hit! 20!"
-            ];
-            let msg;
-            if (roll === 20) msg = messages[7];
-            else if (roll === 1) msg = messages[0];
-            else msg = `You rolled a ${roll}. ${messages[Math.floor(Math.random() * 5) + 1]}`;
-            showToast(msg);
+            const facts = d20Facts[roll];
+            const fact = facts[Math.floor(Math.random() * facts.length)];
+            showToast(`<strong>Critical Roll: ${roll}</strong> ${fact}`);
         });
 
         // --- Scroll Animations ---
-        const observerOptions = {
-            threshold: 0.1
-        };
-
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         }, observerOptions);
 
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
-        });
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
 
         window.addEventListener('resize', resize);
         resize();
