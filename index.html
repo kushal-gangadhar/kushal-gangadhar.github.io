@@ -376,10 +376,45 @@
         }
 
         @media (max-width: 600px) {
-            #hero { padding-top: 20vh; }
-            .hero-name { font-size: 3.5rem; }
-            #die-zone { top: 20px; left: 20px; width: 100px; height: 100px; }
-            footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+            #hero { 
+                padding-top: 15vh; 
+                height: auto;
+                min-height: 100vh;
+            }
+            .hero-layout {
+                flex-direction: column-reverse;
+                gap: 2rem;
+                align-items: center;
+                text-align: center;
+            }
+            .hero-content {
+                max-width: 100%;
+            }
+            .hero-name { 
+                font-size: 2.2rem; 
+            }
+            .hero-image-box {
+                width: 180px;
+                height: 180px;
+            }
+            .minimal-link {
+                margin: 0.5rem;
+                display: inline-block;
+            }
+            #die-zone { 
+                top: 15px; 
+                left: 15px; 
+                width: 80px; 
+                height: 80px; 
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            footer { 
+                flex-direction: column; 
+                gap: 1.5rem; 
+                text-align: center; 
+            }
         }
 
         @keyframes bounce {
