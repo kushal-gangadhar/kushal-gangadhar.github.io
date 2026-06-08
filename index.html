@@ -3,7 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kushal Gangadharaiah</title>
+    <title>Kushal Gangadharaiah | Software Engineer & Researcher</title>
+    <meta name="description" content="Kushal Gangadharaiah is a Computer Science student interested in formal verification, decentralized systems, and AI. Explore his portfolio of BFT set reconciliation, formal methods research, and more.">
+    <meta name="keywords" content="Kushal Gangadharaiah, Kushal Gangadharaiah, Software Engineer, Formal Verification, Distributed Systems, BFT, Decentralized Systems, AI, Computer Science, Portfolio">
+    <meta name="author" content="Kushal Gangadharaiah">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kushal-gangadhar.github.io/">
+    <meta property="og:title" content="Kushal Gangadharaiah | Software Engineer & Researcher">
+    <meta property="og:description" content="Computer Science student focused on formal verification, decentralized systems, and AI.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kushal-gangadhar.github.io/">
+    <meta property="twitter:title" content="Kushal Gangadharaiah | Software Engineer & Researcher">
+    <meta property="twitter:description" content="Computer Science student focused on formal verification, decentralized systems, and AI.">
+
     <!-- Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -255,7 +271,7 @@
             left: 50px;
             width: 180px; /* Increased size by 40%+ */
             height: 180px;
-            cursor: pointer;
+            cursor: default;
             z-index: 100;
             border-radius: 50%;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -320,6 +336,12 @@
             #die-zone { top: 20px; left: 20px; width: 100px; height: 100px; }
             footer { flex-direction: column; gap: 1.5rem; text-align: center; }
         }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
     </style>
 </head>
 <body>
@@ -345,6 +367,9 @@
                     connect on <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="link-icon" style="display: inline-flex; font-size: 1.1rem;">LinkedIn ↗</a>, 
                     or just <a href="mailto:kushalgangadhariah@gmail.com" onclick="copyEmail(event)" class="link-icon" style="display: inline-flex; font-size: 1.1rem;">say hello ↗</a>.
                 </p>
+                <div style="margin-top: 4rem; animation: bounce 2s infinite;">
+                    <a href="#projects" class="link-icon" style="font-size: 1.1rem; color: var(--accent-purple); font-weight: 700;">See my projects ↓</a>
+                </div>
             </div>
         </section>
 
