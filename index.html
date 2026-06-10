@@ -30,7 +30,7 @@
             /* Pastel Theme Palette */
             --bg-color: #f8f7ff; /* Soft Lavender White */
             --text-primary: #2d2a3d;
-            --text-secondary: #5e5a75;
+            --text-secondary: #4a465c; /* Darkened for better contrast */
             --accent-purple: #b19cd9;
             --accent-lime: #bef264;
             --accent-pink: #f472b6;
@@ -87,11 +87,11 @@
         /* Glassmorphism Utility */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.6);
             padding: 2.5rem;
             margin-bottom: 2.5rem;
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
@@ -99,7 +99,7 @@
 
         .glass-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 15px 45px 0 rgba(177, 156, 217, 0.25);
+            box-shadow: 0 15px 45px 0 rgba(177, 156, 217, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         /* Section Styling */
@@ -151,8 +151,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            padding-top: 25vh;
+            justify-content: center;
         }
 
         .hero-layout {
@@ -182,12 +181,17 @@
             line-height: 1.7;
         }
 
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(177, 156, 217, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(177, 156, 217, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(177, 156, 217, 0); }
+        }
+
         .hero-image-box {
             width: 240px;
             height: 240px;
             flex-shrink: 0;
             background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
@@ -195,6 +199,16 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            animation: pulseGlow 3s infinite;
+        }
+
+        .hero-image-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            pointer-events: none;
         }
 
         .hero-image-box img {
