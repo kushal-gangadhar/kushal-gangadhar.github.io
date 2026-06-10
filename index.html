@@ -21,6 +21,7 @@
     <meta property="twitter:description" content="Computer Science student focused on formal verification, decentralized systems, and AI.">
 
     <!-- Modern Typography -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -443,10 +444,10 @@
                             I thrive on the challenge of bridging the gap between theoretical research and robust, real-world implementations.
                         </p>
                         <p style="margin-top: 1.5rem; font-size: 1.1rem; line-height: 2;">
-                            <a href="resume.pdf" class="minimal-link">Resume</a> 
-                            <a href="https://github.com/kushal-gangadhar" class="minimal-link">GitHub</a> 
-                            <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="minimal-link">LinkedIn</a> 
-                            <a href="mailto:kushalgangadhariah@gmail.com" onclick="copyEmail(event)" class="minimal-link">Email</a>
+                            <a href="resume.pdf" class="minimal-link" aria-label="View Resume">Resume</a> 
+                            <a href="https://github.com/kushal-gangadhar" class="minimal-link" aria-label="GitHub Profile">GitHub</a> 
+                            <a href="https://www.linkedin.com/in/g-kushal-74664a254" class="minimal-link" aria-label="LinkedIn Profile">LinkedIn</a> 
+                            <a href="mailto:kushalgangadhariah@gmail.com" onclick="copyEmail(event)" class="minimal-link" aria-label="Copy Email Address">Email</a>
                         </p>
                         <div style="margin-top: 4rem; animation: bounce 2s infinite;">
                             <a href="#projects" class="link-icon" style="font-size: 1.1rem; color: var(--accent-purple); font-weight: 700;">See my projects ↓</a>
@@ -455,7 +456,7 @@
                 </div>
                 <div class="hero-image-box">
                     <!-- Replace 'profile.jpg' with your image path -->
-                    <img src="profile.jpg" alt="Kushal Gangadharaiah" onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\'color: var(--text-secondary); font-size: 0.9rem;\'>Photo Placeholder</span>'">
+                    <img src="profile.jpg" alt="Kushal Gangadharaiah" loading="lazy" onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\'color: var(--text-secondary); font-size: 0.9rem;\'>Photo Placeholder</span>'">
                 </div>
             </div>
         </section>
@@ -473,7 +474,7 @@
                     </div>
                     <h3>Byzantine fault tolerant set reconciliation</h3>
                     <p>Benchmarking recent Set reconciliation algorithms and comparing their trade-offs in terms of performance, security, and other characteristics</p>
-                    <a href="https://github.com/kushal-gangadhar/byzantine-set-recon" class="link-icon">view_source ↗</a>
+                    <a href="https://github.com/kushal-gangadhar/byzantine-set-recon" class="link-icon" aria-label="View source code for Byzantine fault tolerant set reconciliation on GitHub">view_source ↗</a>
                 </div>
                 <div class="glass-card project-card">
                     <div style="margin-bottom: 1rem;">
@@ -482,7 +483,7 @@
                     </div>
                     <h3>Aura Shop</h3>
                     <p>A headless e-commerce storefront optimized for speed and performance.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-icon">view_source ↗</a>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon" aria-label="View source code for Aura Shop on GitHub">view_source ↗</a>
                 </div>
             </div>
 
@@ -495,7 +496,7 @@
                     </div>
                     <h3>Formal Verification Research</h3>
                     <p>Investigating automated proof techniques for distributed consensus protocols.</p>
-                    <a href="https://github.com/kushal-gangadhar" class="link-icon">read_more ↗</a>
+                    <a href="https://github.com/kushal-gangadhar" class="link-icon" aria-label="Read more about Formal Verification Research on GitHub">read_more ↗</a>
                 </div>
             </div>
         </section>
@@ -882,7 +883,12 @@
             e.preventDefault();
             const email = "kushalgangadhariah@gmail.com";
             navigator.clipboard.writeText(email).then(() => {
-                alert("My email address is now on your clipboard.");
+                const toast = document.getElementById('toast');
+                toast.innerHTML = '<strong>Email Copied!</strong>' + email;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
             });
         }
 
