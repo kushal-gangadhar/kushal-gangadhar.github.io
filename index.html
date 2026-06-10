@@ -575,7 +575,7 @@
         const ctx = canvas.getContext('2d');
 
         let dots = [];
-        const dotSpacing = 40; // Reduced for smaller grid squares
+        const dotSpacing = 60; // Increased slightly for better balance
         const jitterAmount = 6;
         let cols = 0, rows = 0;
         let pathWalkers = [];
@@ -859,10 +859,13 @@
             dots = [];
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
-                    const x = i * dotSpacing, y = j * dotSpacing;
-                    const cIdx = (i + j) % 3;
-                    const colors = ['rgba(177,156,217,0.4)','rgba(244,114,182,0.4)','rgba(163,213,255,0.4)'];
-                    dots.push(new Dot(x, y, colors[cIdx]));
+                    // Only generate a dot on ~30% of the vertices for a cleaner look
+                    if (Math.random() < 0.3) {
+                        const x = i * dotSpacing, y = j * dotSpacing;
+                        const cIdx = (i + j) % 3;
+                        const colors = ['rgba(177,156,217,0.4)','rgba(244,114,182,0.4)','rgba(163,213,255,0.4)'];
+                        dots.push(new Dot(x, y, colors[cIdx]));
+                    }
                 }
             }
         }
