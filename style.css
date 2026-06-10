@@ -56,22 +56,11 @@
             padding: 0 2rem;
         }
 
-        /* Glassmorphism Utility */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 0;
-            box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            padding: 2rem; /* Reduced from 2.5rem */
-            margin-bottom: 2rem; /* Reduced from 2.5rem */
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 45px 0 rgba(177, 156, 217, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        /* Editorial Layout Utility */
+        .editorial-block {
+            padding: 3rem 0;
+            border-top: 1px solid var(--text-primary);
+            border-bottom: 1px solid var(--text-primary);
         }
 
         /* Section Styling */
@@ -253,11 +242,21 @@
             color: var(--accent-purple);
         }
 
-        /* Projects */
+        /* Projects - Editorial Stack */
         .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid var(--text-primary);
+        }
+
+        .project-card {
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--text-primary);
+            transition: padding-left 0.3s ease;
+        }
+
+        .project-card:hover {
+            padding-left: 1.5rem;
         }
 
         .project-card h3 {
@@ -442,4 +441,4 @@ nav a:hover {
     color: var(--accent-purple);
 }
 ;
-}
+
