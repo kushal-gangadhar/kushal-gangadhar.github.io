@@ -538,7 +538,7 @@
                 const data = await response.json();
                 if (data && data.length > 0) {
                     const commitDate = new Date(data[0].commit.committer.date);
-                    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                    const options = { year: 'numeric', month: 'long' };
                     document.getElementById('last-updated').textContent = `| Last updated: ${commitDate.toLocaleDateString('en-US', options)}`;
                 }
             } catch (error) {
