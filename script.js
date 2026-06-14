@@ -29,11 +29,40 @@
         const ctx = canvas.getContext('2d');
 
         let dots = [];
+        let florals = [];
         const dotSpacing = 60; // Increased slightly for better balance
         const jitterAmount = 6;
         let cols = 0, rows = 0;
         let pathWalkers = [];
         let spawnTimer = 0;
+
+        class Floral {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.scale = 0.4 + Math.random() * 0.4;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.scale(this.scale, this.scale);
+                ctx.fillStyle = this.color;
+                // Draw 5 petals
+                for (let i = 0; i < 5; i++) {
+                    ctx.rotate((Math.PI * 2) / 5);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 10, 4, 8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                // Center of the flower
+                ctx.beginPath();
+                ctx.arc(0, 0, 3, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
 
         class Dot {
             constructor(x, y, color) {
@@ -311,14 +340,20 @@
             cols = Math.ceil(canvas.width / dotSpacing) + 1;
             rows = Math.ceil(canvas.height / dotSpacing) + 1;
             dots = [];
+            florals = [];
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
-                    // Only generate a dot on ~30% of the vertices for a cleaner look
-                    if (Math.random() < 0.3) {
-                        const x = i * dotSpacing, y = j * dotSpacing;
+                    const x = i * dotSpacing, y = j * dotSpacing;
+                    const rand = Math.random();
+                    if (rand < 0.3) {
                         const cIdx = (i + j) % 3;
                         const colors = ['rgba(177,156,217,0.4)','rgba(244,114,182,0.4)','rgba(163,213,255,0.4)'];
                         dots.push(new Dot(x, y, colors[cIdx]));
+                    } else if (rand > 0.9) {
+                        // Place a floral pattern in ~10% of empty grid spots
+                        const cIdx = (i + j) % 3;
+                        const colors = ['rgba(177,156,217,0.1)','rgba(244,114,182,0.1)','rgba(163,213,255,0.1)'];
+                        florals.push(new Floral(x, y, colors[cIdx]));
                     }
                 }
             }
@@ -326,6 +361,7 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            florals.forEach(f => f.draw());
             dots.forEach(dot => { dot.update(); dot.draw(); });
             ctx.beginPath(); ctx.strokeStyle = 'rgba(0,0,0,0.015)';
             for(let x=0; x<canvas.width; x+=dotSpacing) { ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); }
