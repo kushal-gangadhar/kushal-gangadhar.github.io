@@ -160,7 +160,6 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            animation: pulseGlow 3s infinite;
         }
 
         .hero-image-box::after {
